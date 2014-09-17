@@ -1,9 +1,9 @@
 # Hacking a Parrot AR Drone
 
 ## Contributors
-*   Dylan Kret
+*   [Dylan Kret](https://github.com/kaptainkret)
 *   [Austin Odell](https://github.com/austinodell)
-*   Matthew Thorp
+*   [Matthew Thorp](https://github.com/Mthorp)
 *   [Andrew Walters](https://github.com/andrewfwalters)
 
 ## Overall Task
