@@ -1,0 +1,6 @@
+codesourcery-arm-2009q3.sh (to enter cross compile environment)
+arm-none-linux-gnueabi-gcc hello.c -o hello_arm
+
+Will only work if you’ve run the codesetup as root user first.  It installs the commands to cross compile.
+
+Actually I think this will only run on Debian so get that.
