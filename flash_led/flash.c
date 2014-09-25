@@ -2,20 +2,13 @@
 
 int main(int argc, char *argv[]) {
 	int a;
-	/*for(a=0; a<10; a++) {
-		system("/usr/sbin/gpio 63 -d ho 0");system("/usr/sbin/gpio 64 -d ho 0"); // Both LEDs off
-		printf("Hello world!");
+	for(a=0; a<10; a++) {
+		system("gpio 181 -d lo 0");system("gpio 180 -d lo 0"); // Both LEDs off
 		sleep(1); // wait 1 second
-		system("/usr/sbin/gpio 64 -d ho 1"); // Green LED on
-		printf("I'm green!");
+		system("gpio 180 -d lo 1"); // Green LED on
 		sleep (1); // wait 1 second
-		system("/usr/sbin/gpio 64 -d ho 0"); // Green LED off
+		system("gpio 181 -d lo 1"); // Red LED on
 		sleep(1); // wait 1 second
-		system("/usr/sbin/gpio 63 -d ho 1"); // Red LED on
-		printf("I'm red!");
-		sleep(1); // wait 1 second
-	}*/
-	//system("/usr/sbin/gpio 64 -d ho 1");
-	printf("Test");
+	}
 	return 0;
 }
