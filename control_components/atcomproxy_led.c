@@ -29,7 +29,7 @@
 int main(int argc, char* argv[])
 {
     int flags               = 0;
-    int verbose             = 1;
+    int verbose             = 0;
     int connectionSocket    = 0;
     int returnNo            = 0;    
     uint addressLength      = 0;
@@ -69,57 +69,23 @@ int main(int argc, char* argv[])
     remoteAddress.sin_port = htons(REMOTE_SERVER_PORT);
     addressLength = sizeof(remoteAddress);
     
-    // If we reach this point we are up and running!
-    printf("%s > Proxy Ready: Waiting for data in %s to send to %s:%u!\n",
-           argv[0],
-           serialDevice,
-           inet_ntoa(remoteAddress.sin_addr),
-           ntohs(remoteAddress.sin_port));
+    // Init/clear buffer
+    memset(message, 0x0, MAX_MESSAGE_LENGTH);
     
-    // Server infinite loop, use ctrl+c to kill proc
-    while (1)
+    sprintf(message,"AT*LED=1,2,1073741824,3\r");
+    
+    // Send message to remote server
+	returnNo = sendto(connectionSocket,
+		message,
+		strlen(message),
+		flags,
+		(struct sockaddr *)&remoteAddress,
+		addressLength);
+		
+	if (returnNo < 0)
     {
-        // Init/clear buffer
-        memset(message, 0x0, MAX_MESSAGE_LENGTH);
-        
-        // Read line from serial
-        returnNo = fscanf(inputFile, "%s", message);
-        
-        if (returnNo < 0)
-        {
-            fprintf(stderr, "%s > ERROR: Cannot read data from device!\n", argv[0]);
-            
-            continue;
-        }
-        
-        if (verbose)
-        {
-            // Print received message, only use for debugging!
-            printf("%s > %s!\n", argv[0], message);
-        }
-        
-        // CONVENTION: Only send messages that begin with the chars 'AT'!
-        // Every AT command must begin with these, everything else is ignored!
-        if (message[0] == 'A' && message[1] == 'T')
-        {
-            // Add line feed to the end
-            strncat(message, "\r", 2);
-            
-            // Send message to remote server
-            returnNo = sendto(connectionSocket,
-                              message,
-                              strlen(message),
-                              flags,
-                              (struct sockaddr *)&remoteAddress,
-                              addressLength);
-            
-            if (returnNo < 0)
-            {
-                fprintf(stderr, "%s > ERROR: Cannot send data!\n", argv[0]);
-            }
-        }
+    	fprintf(stderr, "%s > ERROR: Cannot send data!\n", argv[0]);
     }
-    // End of server infinite loop
     
     return 0;
 }
