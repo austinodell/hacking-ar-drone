@@ -82,35 +82,6 @@ int main(int argc, char* argv[])
 
     struct sockaddr_in remoteAddress;
     
-    // Read arguments
-    /*opterr = 0;
-    int opt;
-    while ((opt = getopt(argc, argv, "i:d:v")) != -1)
-    {
-        switch (opt)
-        {
-            case 'v':
-                verbose = 1;
-                break;
-            case 'i':
-                remoteIpAddress = optarg;
-                break;
-            case 'd':
-                serialDevice = optarg;
-                break;
-            case '?':
-                if ((optopt == 'i') || (optopt == 'd'))
-                    fprintf(stderr, "%s > ERROR: Option -%c requires an argument.\n", argv[0], optopt);
-                else if (isprint(optopt))
-                    fprintf(stderr, "%s > ERROR: Unknown option `-%c'.\n", argv[0], optopt);
-                else
-                    fprintf(stderr, "%s > ERROR: Unknown option character `\\x%x'.\n", argv[0], optopt);
-                return 1;
-            default:
-                abort();
-        }
-    }*/
-    
     // Use default device if no device was given
     if (serialDevice == NULL)
     {
