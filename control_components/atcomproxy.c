@@ -83,16 +83,16 @@ int main(int argc, char* argv[])
     struct sockaddr_in remoteAddress;
     
     // Use default device if no device was given
-    if (serialDevice == NULL)
-    {
+    //if (serialDevice == NULL)
+    //{
         serialDevice = DEFAULT_SERIAL_DEVICE;
-    }
+    //}
     
     // Use default ip address if no ip was given
-    if (remoteIpAddress == NULL)
-    {
+    //if (remoteIpAddress == NULL)
+    //{
         remoteIpAddress = REMOTE_SERVER_ADDRESS;
-    }
+    //}
     
     // Create socket with UDP setting (SOCK_DGRAM)
     connectionSocket = socket(AF_INET, SOCK_DGRAM, 0);
