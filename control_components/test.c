@@ -22,7 +22,7 @@ int main(int argc, char *argv[]) {
 	uint16_t mot_pwm = (uint16_t) MOT_PWM_max/4;
 	//motorboard_SetPWM(mot_pwm,mot_pwm,mot_pwm,mot_pwm);
 	
-	mot_fd = open("/dev/tty", O_RDWR | O_NOCTTY | O_NDELAY);
+	mot_fd = open("/dev/ttyO0 : motor", O_RDWR | O_NOCTTY | O_NDELAY);
 	if (mot_fd == -1)
 	{
 		perror("open_port: Unable to open /dev/tty - ");

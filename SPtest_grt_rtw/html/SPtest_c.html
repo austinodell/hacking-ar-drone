@@ -1,0 +1,133 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>RTW Report - SPtest.c</title>
+<style> .LN { font-style: italic; color: #888888 } </style>
+<style> .CT { font-style: italic; color: #117755 } </style>
+<style> .PP { font-style: bold;   color: #992211 } </style>
+<style> .KW { font-style: bold;   color: #112266 } </style>
+<style> .DT { font-style: bold;   color: #112266 } </style>
+<link rel="stylesheet" type="text/css" href="rtwreport.css"></link><script language="JavaScript" type="text/javascript" src="rtwreport_utils.js"></script>
+<SCRIPT type="text/javascript" src="rtwannotate.js"></SCRIPT>
+</head>
+<body bgcolor="#eeeeee" text="#1122aa" onload="try {if (top) { if (top.rtwFileOnLoad) top.rtwFileOnLoad(window.document); else local_onload();}} catch(err) {};if (typeof rtwannotate === 'function') {rtwannotate('SPtest_c_cov.xml');}">
+<p>
+<table border="0" cellspacing="0" cellpadding="6" width="100%%" height="100%%"><tr><td width="100%%" valign="top" bgcolor="#ffffff">
+<h4>File: <a href="../SPtest.c" target="rtwreport_document_frame" id="linkToText_plain">SPtest.c</a></h4>
+<pre id="RTWcode">
+<span><a class="LN" name="1">    1   </a><span class="CT">/*</span>
+</span><span><a class="LN" name="2">    2   </a><span class="CT"> * SPtest.c</span>
+</span><span><a class="LN" name="3">    3   </a><span class="CT"> *</span>
+</span><span><a class="LN" name="4">    4   </a><span class="CT"> * Code generation for model "SPtest".</span>
+</span><span><a class="LN" name="5">    5   </a><span class="CT"> *</span>
+</span><span><a class="LN" name="6">    6   </a><span class="CT"> * Model version              : 1.253</span>
+</span><span><a class="LN" name="7">    7   </a><span class="CT"> * Simulink Coder version : 8.6 (R2014a) 27-Dec-2013</span>
+</span><span><a class="LN" name="8">    8   </a><span class="CT"> * C source code generated on : Thu Oct 02 14:52:00 2014</span>
+</span><span><a class="LN" name="9">    9   </a><span class="CT"> *</span>
+</span><span><a class="LN" name="10">   10   </a><span class="CT"> * Target selection: grt.tlc</span>
+</span><span><a class="LN" name="11">   11   </a><span class="CT"> * Note: GRT includes extra infrastructure and instrumentation for prototyping</span>
+</span><span><a class="LN" name="12">   12   </a><span class="CT"> * Embedded hardware selection: Generic-&gt;32-bit Embedded Processor</span>
+</span><span><a class="LN" name="13">   13   </a><span class="CT"> * Code generation objectives: Unspecified</span>
+</span><span><a class="LN" name="14">   14   </a><span class="CT"> * Validation result: Not run</span>
+</span><span><a class="LN" name="15">   15   </a><span class="CT"> */</span>
+</span><span><a class="LN" name="16">   16   </a><font color="#992211">#</font><span class="PP">include</span> <font color="#992211">&quot;SPtest.h&quot;</font>
+</span><span><a class="LN" name="17">   17   </a><font color="#992211">#</font><span class="PP">include</span> <font color="#992211">&quot;SPtest_private.h&quot;</font>
+</span><span><a class="LN" name="18">   18   </a>
+</span><span><a class="LN" name="19">   19   </a><span class="CT">/* External outputs (root outports fed by signals with auto storage) */</span>
+</span><span><a class="LN" name="20">   20   </a><a href="SPtest_h.html#type_ExtY_SPtest_T" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_ExtY_SPtest_T');" target="_self"><font color="#1122aa">ExtY_SPtest_T</font></a> <a name="var_SPtest_Y">SPtest_Y</a>;
+</span><span><a class="LN" name="21">   21   </a>
+</span><span><a class="LN" name="22">   22   </a><span class="CT">/* Real-time model */</span>
+</span><span><a class="LN" name="23">   23   </a><a href="SPtest_types_h.html#type_RT_MODEL_SPtest_T" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_RT_MODEL_SPtest_T');" target="_self"><font color="#1122aa">RT_MODEL_SPtest_T</font></a> <a name="var_SPtest_M_">SPtest_M_</a>;
+</span><span><a class="LN" name="24">   24   </a><a href="SPtest_types_h.html#type_RT_MODEL_SPtest_T" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_RT_MODEL_SPtest_T');" target="_self"><font color="#1122aa">RT_MODEL_SPtest_T</font></a> *<span class="DT">const</span> <a name="var_SPtest_M">SPtest_M</a> = &amp;<a href="#var_SPtest_M_" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_SPtest_M_');" target="_self"><font color="#1122aa">SPtest_M_</font></a>;
+</span><span><a class="LN" name="25">   25   </a>
+</span><span><a class="LN" name="26">   26   </a><span class="CT">/* Model step function */</span>
+</span><span><a class="LN" name="27">   27   </a><span class="DT">void</span> <a name="fcn_SPtest_step">SPtest_step</a>(<span class="DT">void</span>)
+</span><span><a class="LN" name="28">   28   </a><b>{</b>
+</span><span><a class="LN" name="29">   29   </a>  <span class="CT">/* Matfile logging */</span>
+</span><span><a class="LN" name="30">   30   </a>  <a href="rt_logging_c.html#fcn_rt_UpdateTXYLogVars" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'fcn_rt_UpdateTXYLogVars');" target="_self"><font color="#1122aa">rt_UpdateTXYLogVars</font></a>(<a href="#var_SPtest_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_SPtest_M');" target="_self"><font color="#1122aa">SPtest_M</font></a>-&gt;rtwLogInfo, (&amp;<a href="#var_SPtest_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_SPtest_M');" target="_self"><font color="#1122aa">SPtest_M</font></a>-&gt;Timing.taskTime0));
+</span><span><a class="LN" name="31">   31   </a>
+</span><span><a class="LN" name="32">   32   </a>  <span class="CT">/* signal main to stop simulation */</span>
+</span><span><a class="LN" name="33">   33   </a>  <b>{</b>                                    <span class="CT">/* Sample time: [0.1s, 0.0s] */</span>
+</span><span><a class="LN" name="34">   34   </a>    <span class="KW">if</span> ((rtmGetTFinal(<a href="#var_SPtest_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_SPtest_M');" target="_self"><font color="#1122aa">SPtest_M</font></a>)!=-1) &amp;&amp;
+</span><span><a class="LN" name="35">   35   </a>        !((rtmGetTFinal(<a href="#var_SPtest_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_SPtest_M');" target="_self"><font color="#1122aa">SPtest_M</font></a>)-<a href="#var_SPtest_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_SPtest_M');" target="_self"><font color="#1122aa">SPtest_M</font></a>-&gt;Timing.taskTime0) &gt;
+</span><span><a class="LN" name="36">   36   </a>          <a href="#var_SPtest_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_SPtest_M');" target="_self"><font color="#1122aa">SPtest_M</font></a>-&gt;Timing.taskTime0 * (DBL_EPSILON))) <b>{</b>
+</span><span><a class="LN" name="37">   37   </a>      rtmSetErrorStatus(<a href="#var_SPtest_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_SPtest_M');" target="_self"><font color="#1122aa">SPtest_M</font></a>, <font color="#1122ff">&quot;Simulation finished&quot;</font>);
+</span><span><a class="LN" name="38">   38   </a>    <b>}</b>
+</span><span><a class="LN" name="39">   39   </a>  <b>}</b>
+</span><span><a class="LN" name="40">   40   </a>
+</span><span><a class="LN" name="41">   41   </a>  <span class="CT">/* Update absolute time for base rate */</span>
+</span><span><a class="LN" name="42">   42   </a>  <span class="CT">/* The "clockTick0" counts the number of times the code of this task has</span>
+</span><span><a class="LN" name="43">   43   </a><span class="CT">   * been executed. The absolute time is the multiplication of "clockTick0"</span>
+</span><span><a class="LN" name="44">   44   </a><span class="CT">   * and "Timing.stepSize0". Size of "clockTick0" ensures timer will not</span>
+</span><span><a class="LN" name="45">   45   </a><span class="CT">   * overflow during the application lifespan selected.</span>
+</span><span><a class="LN" name="46">   46   </a><span class="CT">   * Timer of this task consists of two 32 bit unsigned integers.</span>
+</span><span><a class="LN" name="47">   47   </a><span class="CT">   * The two integers represent the low bits Timing.clockTick0 and the high bits</span>
+</span><span><a class="LN" name="48">   48   </a><span class="CT">   * Timing.clockTickH0. When the low bit overflows to 0, the high bits increment.</span>
+</span><span><a class="LN" name="49">   49   </a><span class="CT">   */</span>
+</span><span><a class="LN" name="50">   50   </a>  <span class="KW">if</span> (!(++<a href="#var_SPtest_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_SPtest_M');" target="_self"><font color="#1122aa">SPtest_M</font></a>-&gt;Timing.clockTick0)) <b>{</b>
+</span><span><a class="LN" name="51">   51   </a>    ++<a href="#var_SPtest_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_SPtest_M');" target="_self"><font color="#1122aa">SPtest_M</font></a>-&gt;Timing.clockTickH0;
+</span><span><a class="LN" name="52">   52   </a>  <b>}</b>
+</span><span><a class="LN" name="53">   53   </a>
+</span><span><a class="LN" name="54">   54   </a>  <a href="#var_SPtest_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_SPtest_M');" target="_self"><font color="#1122aa">SPtest_M</font></a>-&gt;Timing.taskTime0 = <a href="#var_SPtest_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_SPtest_M');" target="_self"><font color="#1122aa">SPtest_M</font></a>-&gt;Timing.clockTick0 *
+</span><span><a class="LN" name="55">   55   </a>    <a href="#var_SPtest_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_SPtest_M');" target="_self"><font color="#1122aa">SPtest_M</font></a>-&gt;Timing.stepSize0 + <a href="#var_SPtest_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_SPtest_M');" target="_self"><font color="#1122aa">SPtest_M</font></a>-&gt;Timing.clockTickH0 *
+</span><span><a class="LN" name="56">   56   </a>    <a href="#var_SPtest_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_SPtest_M');" target="_self"><font color="#1122aa">SPtest_M</font></a>-&gt;Timing.stepSize0 * 4294967296.0;
+</span><span><a class="LN" name="57">   57   </a><b>}</b>
+</span><span><a class="LN" name="58">   58   </a>
+</span><span><a class="LN" name="59">   59   </a><span class="CT">/* Model initialize function */</span>
+</span><span><a class="LN" name="60">   60   </a><span class="DT">void</span> <a name="fcn_SPtest_initialize">SPtest_initialize</a>(<span class="DT">void</span>)
+</span><span><a class="LN" name="61">   61   </a><b>{</b>
+</span><span><a class="LN" name="62">   62   </a>  <span class="CT">/* Registration code */</span>
+</span><span><a class="LN" name="63">   63   </a>
+</span><span><a class="LN" name="64">   64   </a>  <span class="CT">/* initialize non-finites */</span>
+</span><span><a class="LN" name="65">   65   </a>  <a href="../../slprj/grt/_sharedutils/html/rt_nonfinite_c.html#fcn_rt_InitInfAndNaN" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'fcn_rt_InitInfAndNaN');" target="_self"><font color="#1122aa">rt_InitInfAndNaN</font></a>(<span class="KW">sizeof</span>(real_T));
+</span><span><a class="LN" name="66">   66   </a>
+</span><span><a class="LN" name="67">   67   </a>  <span class="CT">/* initialize real-time model */</span>
+</span><span><a class="LN" name="68">   68   </a>  (<span class="DT">void</span>) memset((<span class="DT">void</span> *)<a href="#var_SPtest_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_SPtest_M');" target="_self"><font color="#1122aa">SPtest_M</font></a>, 0,
+</span><span><a class="LN" name="69">   69   </a>                <span class="KW">sizeof</span>(<a href="SPtest_types_h.html#type_RT_MODEL_SPtest_T" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_RT_MODEL_SPtest_T');" target="_self"><font color="#1122aa">RT_MODEL_SPtest_T</font></a>));
+</span><span><a class="LN" name="70">   70   </a>  rtmSetTFinal(<a href="#var_SPtest_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_SPtest_M');" target="_self"><font color="#1122aa">SPtest_M</font></a>, 5.0);
+</span><span><a class="LN" name="71">   71   </a>  <a href="#var_SPtest_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_SPtest_M');" target="_self"><font color="#1122aa">SPtest_M</font></a>-&gt;Timing.stepSize0 = 0.1;
+</span><span><a class="LN" name="72">   72   </a>
+</span><span><a class="LN" name="73">   73   </a>  <span class="CT">/* Setup for data logging */</span>
+</span><span><a class="LN" name="74">   74   </a>  <b>{</b>
+</span><span><a class="LN" name="75">   75   </a>    <span class="DT">static</span> RTWLogInfo rt_DataLoggingInfo;
+</span><span><a class="LN" name="76">   76   </a>    <a href="#var_SPtest_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_SPtest_M');" target="_self"><font color="#1122aa">SPtest_M</font></a>-&gt;rtwLogInfo = &amp;rt_DataLoggingInfo;
+</span><span><a class="LN" name="77">   77   </a>  <b>}</b>
+</span><span><a class="LN" name="78">   78   </a>
+</span><span><a class="LN" name="79">   79   </a>  <span class="CT">/* Setup for data logging */</span>
+</span><span><a class="LN" name="80">   80   </a>  <b>{</b>
+</span><span><a class="LN" name="81">   81   </a>    rtliSetLogXSignalInfo(<a href="#var_SPtest_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_SPtest_M');" target="_self"><font color="#1122aa">SPtest_M</font></a>-&gt;rtwLogInfo, (NULL));
+</span><span><a class="LN" name="82">   82   </a>    rtliSetLogXSignalPtrs(<a href="#var_SPtest_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_SPtest_M');" target="_self"><font color="#1122aa">SPtest_M</font></a>-&gt;rtwLogInfo, (NULL));
+</span><span><a class="LN" name="83">   83   </a>    rtliSetLogT(<a href="#var_SPtest_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_SPtest_M');" target="_self"><font color="#1122aa">SPtest_M</font></a>-&gt;rtwLogInfo, <font color="#1122ff">&quot;&quot;</font>);
+</span><span><a class="LN" name="84">   84   </a>    rtliSetLogX(<a href="#var_SPtest_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_SPtest_M');" target="_self"><font color="#1122aa">SPtest_M</font></a>-&gt;rtwLogInfo, <font color="#1122ff">&quot;&quot;</font>);
+</span><span><a class="LN" name="85">   85   </a>    rtliSetLogXFinal(<a href="#var_SPtest_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_SPtest_M');" target="_self"><font color="#1122aa">SPtest_M</font></a>-&gt;rtwLogInfo, <font color="#1122ff">&quot;&quot;</font>);
+</span><span><a class="LN" name="86">   86   </a>    rtliSetLogVarNameModifier(<a href="#var_SPtest_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_SPtest_M');" target="_self"><font color="#1122aa">SPtest_M</font></a>-&gt;rtwLogInfo, <font color="#1122ff">&quot;rt_&quot;</font>);
+</span><span><a class="LN" name="87">   87   </a>    rtliSetLogFormat(<a href="#var_SPtest_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_SPtest_M');" target="_self"><font color="#1122aa">SPtest_M</font></a>-&gt;rtwLogInfo, 2);
+</span><span><a class="LN" name="88">   88   </a>    rtliSetLogMaxRows(<a href="#var_SPtest_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_SPtest_M');" target="_self"><font color="#1122aa">SPtest_M</font></a>-&gt;rtwLogInfo, 0);
+</span><span><a class="LN" name="89">   89   </a>    rtliSetLogDecimation(<a href="#var_SPtest_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_SPtest_M');" target="_self"><font color="#1122aa">SPtest_M</font></a>-&gt;rtwLogInfo, 1);
+</span><span><a class="LN" name="90">   90   </a>    rtliSetLogY(<a href="#var_SPtest_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_SPtest_M');" target="_self"><font color="#1122aa">SPtest_M</font></a>-&gt;rtwLogInfo, <font color="#1122ff">&quot;&quot;</font>);
+</span><span><a class="LN" name="91">   91   </a>    rtliSetLogYSignalInfo(<a href="#var_SPtest_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_SPtest_M');" target="_self"><font color="#1122aa">SPtest_M</font></a>-&gt;rtwLogInfo, (NULL));
+</span><span><a class="LN" name="92">   92   </a>    rtliSetLogYSignalPtrs(<a href="#var_SPtest_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_SPtest_M');" target="_self"><font color="#1122aa">SPtest_M</font></a>-&gt;rtwLogInfo, (NULL));
+</span><span><a class="LN" name="93">   93   </a>  <b>}</b>
+</span><span><a class="LN" name="94">   94   </a>
+</span><span><a class="LN" name="95">   95   </a>  <span class="CT">/* external outputs */</span>
+</span><span><a class="LN" name="96">   96   </a>  <a href="#var_SPtest_Y" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_SPtest_Y');" target="_self"><font color="#1122aa">SPtest_Y</font></a>.Out1 = 0.0;
+</span><span><a class="LN" name="97">   97   </a>
+</span><span><a class="LN" name="98">   98   </a>  <span class="CT">/* Matfile logging */</span>
+</span><span><a class="LN" name="99">   99   </a>  <a href="rt_logging_c.html#fcn_rt_StartDataLoggingWithStartTime" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'fcn_rt_StartDataLoggingWithStartTime');" target="_self"><font color="#1122aa">rt_StartDataLoggingWithStartTime</font></a>(<a href="#var_SPtest_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_SPtest_M');" target="_self"><font color="#1122aa">SPtest_M</font></a>-&gt;rtwLogInfo, 0.0, rtmGetTFinal
+</span><span><a class="LN" name="100">  100   </a>    (<a href="#var_SPtest_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_SPtest_M');" target="_self"><font color="#1122aa">SPtest_M</font></a>), <a href="#var_SPtest_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_SPtest_M');" target="_self"><font color="#1122aa">SPtest_M</font></a>-&gt;Timing.stepSize0, (&amp;rtmGetErrorStatus(<a href="#var_SPtest_M" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_SPtest_M');" target="_self"><font color="#1122aa">SPtest_M</font></a>)));
+</span><span><a class="LN" name="101">  101   </a>
+</span><span><a class="LN" name="102">  102   </a>  <span class="CT">/* ConstCode for Outport: '&lt;Root&gt;/Out1' */</span>
+</span><span><a class="LN" name="103">  103   </a>  <a href="#var_SPtest_Y" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_SPtest_Y');" target="_self"><font color="#1122aa">SPtest_Y</font></a>.Out1 = 2.0;
+</span><span><a class="LN" name="104">  104   </a><b>}</b>
+</span><span><a class="LN" name="105">  105   </a>
+</span><span><a class="LN" name="106">  106   </a><span class="CT">/* Model terminate function */</span>
+</span><span><a class="LN" name="107">  107   </a><span class="DT">void</span> <a name="fcn_SPtest_terminate">SPtest_terminate</a>(<span class="DT">void</span>)
+</span><span><a class="LN" name="108">  108   </a><b>{</b>
+</span><span><a class="LN" name="109">  109   </a>  <span class="CT">/* (no terminate code required) */</span>
+</span><span><a class="LN" name="110">  110   </a><b>}</b>
+</span><span><a class="LN" name="111">  111   </a>
+</span></pre>
+</td></tr></table>
+</p>
+</body>
+</html>
