@@ -19,13 +19,13 @@ void motorboard_SetPWM(uint16_t,uint16_t,uint16_t,uint16_t);
 
 int main(int argc, char *argv[]) {
 	motorboard_SetLeds(MOT_LEDOFF,MOT_LEDGREEN,MOT_LEDRED,MOT_LEDORANGE);
-	uint16_t mot_pwm = (uint16_t) MOT_PWM_max/2;
-	motorboard_SetPWM(mot_pwm,mot_pwm,mot_pwm,mot_pwm);
+	uint16_t mot_pwm = (uint16_t) MOT_PWM_max/4;
+	//motorboard_SetPWM(mot_pwm,mot_pwm,mot_pwm,mot_pwm);
 	
-	mot_fd = open("/dev/ttyPA1", O_RDWR | O_NOCTTY | O_NDELAY);
+	mot_fd = open("/dev/tty", O_RDWR | O_NOCTTY | O_NDELAY);
 	if (mot_fd == -1)
 	{
-		perror("open_port: Unable to open /dev/ttyPA1 - ");
+		perror("open_port: Unable to open /dev/tty - ");
 	}
 }
 
