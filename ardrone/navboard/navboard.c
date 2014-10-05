@@ -229,10 +229,10 @@ int nav_Init(nav_struct* nav) {
 	//-opost -olcuc -ocrnl onlcr -onocr -onlret -ofill -ofdel nl0 cr0 tab0 bs0 vt0 ff0 -isig -icanon -iexten 
 	//-echo echoe echok -echonl -noflsh -xcase -tostop -echoprt echoctl echoke
 
-	nav_fd = open("/dev/ttyPA2", O_RDWR | O_NOCTTY | O_NDELAY);
+	nav_fd = open("/dev/ttyO1", O_RDWR | O_NOCTTY | O_NDELAY);
 	if (nav_fd == -1)
 	{
-		perror("nav_Init: Unable to open /dev/ttyPA2 - ");
+		perror("nav_Init: Unable to open /dev/ttyO1 - ");
 		return 101;
 	} 
 	fcntl(nav_fd, F_SETFL, 0); //read calls are non blocking

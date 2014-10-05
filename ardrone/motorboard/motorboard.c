@@ -51,10 +51,10 @@ int motorboard_cmd(u08 cmd, u08 *reply, int replylen) {
 
 int motorboard_Init() {
 	//open mot port
-	mot_fd = open("/dev/ttyPA1", O_RDWR | O_NOCTTY | O_NDELAY);
+	mot_fd = open("/dev/ttyO0", O_RDWR | O_NOCTTY | O_NDELAY);
 	if (mot_fd == -1)
 	{
-		perror("open_port: Unable to open /dev/ttyPA1 - ");
+		perror("open_port: Unable to open /dev/ttyO0 - ");
 		return 201;
 	} 
 	fcntl(mot_fd, F_SETFL, 0); //read calls are non blocking
