@@ -224,7 +224,7 @@ int nav_FlatTrim()
 
 int nav_Init(nav_struct* nav) {
 	//open nav port
-	//stty -F /dev/ttyPA2 460800 -parenb -parodd cs8 -hupcl -cstopb cread clocal -crtscts 
+	//stty -F /dev/ttyO1 460800 -parenb -parodd cs8 -hupcl -cstopb cread clocal -crtscts 
 	//-ignbrk -brkint -ignpar -parmrk -inpck -istrip -inlcr -igncr -icrnl -ixon -ixoff -iuclc -ixany -imaxbel 
 	//-opost -olcuc -ocrnl onlcr -onocr -onlret -ofill -ofdel nl0 cr0 tab0 bs0 vt0 ff0 -isig -icanon -iexten 
 	//-echo echoe echok -echonl -noflsh -xcase -tostop -echoprt echoctl echoke
