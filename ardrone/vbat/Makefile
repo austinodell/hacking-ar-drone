@@ -1,10 +1,13 @@
+FILE = ../compiler_loc.dat
+LOC = $(shell cat ${FILE})
+
 all: clean vbat
 
 setup:
 	mkdir -p ../bin/vbat
 
-vbat: setup /usr/local/carlson-minot/crosscompilers/bin/arm-none-linux-gnueabi-g++ vbat.c main_vbat.c
-	/usr/local/carlson-minot/crosscompilers/bin/arm-none-linux-gnueabi-g++ -o ../bin/vbat/vbat vbat.c main_vbat.c
+vbat: setup $(LOC) vbat.c main_vbat.c
+	$(LOC) -o ../bin/vbat/vbat vbat.c main_vbat.c
 
 clean:
 	rm -rf ../bin/vbat

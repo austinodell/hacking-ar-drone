@@ -1,13 +1,16 @@
+FILE = ../compiler_loc.dat
+LOC = $(shell cat ${FILE})
+
 all: clean udpserver udpclient
 
 setup:
 	mkdir -p ../bin/udp
 
-udpserver: setup /usr/local/carlson-minot/crosscompilers/bin/arm-none-linux-gnueabi-g++ udp.c main_udpserver.c
-	/usr/local/carlson-minot/crosscompilers/bin/arm-none-linux-gnueabi-g++ -o ../bin/udp/udpserver udp.c main_udpserver.c
+udpserver: setup $(LOC) udp.c main_udpserver.c
+	$(LOC) -o ../bin/udp/udpserver udp.c main_udpserver.c
 
-udpclient: /usr/local/carlson-minot/crosscompilers/bin/arm-none-linux-gnueabi-g++ udp.c main_udpclient.c
-	/usr/local/carlson-minot/crosscompilers/bin/arm-none-linux-gnueabi-g++ -o ../bin/udp/udpclient udp.c main_udpclient.c
+udpclient: $(LOC) udp.c main_udpclient.c
+	$(LOC) -o ../bin/udp/udpclient udp.c main_udpclient.c
 
 clean:
 	rm -rf ../bin/udp
