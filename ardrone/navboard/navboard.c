@@ -61,7 +61,8 @@ int nav_GetSample(nav_struct* nav)
 		//available the call will return immediately due to fcntl(fd, F_SETFL, FNDELAY)
 		//The FNDELAY option causes the read function to return 0 if no characters are available on the port.
 		n = read(nav_fd, nav, 46);
-		if(n<46) return 1; //no packet received
+		if(n==-1) perror("error reading");
+		if(n<46) return n; //no packet received
 	} while(n - 46 > 46);  //loop until last full packet is read
 	//check data is valid
 	u16 checksum	
@@ -169,7 +170,7 @@ int nav_FlatTrim()
 			int rc = nav_GetSample(&nav);
 			if(rc==0) break;
 			retries++;
-			printf("nav_Calibrate: retry=%d, code=%d\r\n",retries,rc); 
+			printf("nav_Calibrate: retry=%d, code=%d\r\n",retries+(n*100),rc); 
 		}
 		n++,
 		x1[0]+=(float)nav.acc[0];
