@@ -34,10 +34,10 @@ Microchip PIC24HJ16GP304
 12 bit ADC, Vref=3.3V -> 0.806mV/lsb
 
 IDG-500 (Dual-axis gyroscope) 
-X-/Y-Out Pins: 500âˆž/s full scale range, 2.0mV/âˆž/s sensitivity
-X/Y4.5Out Pins: 110âˆž/s full scale range, 9.1mV/âˆž/s sensitivity
-Vref = 1350Â±50mV
-Temperature Sensor: Range -20 to +85âˆžC, Sensitivity 4mV/âˆžC, Offset 1.25V at room temperature
+X-/Y-Out Pins: 500°/s full scale range, 2.0mV/°/s sensitivity
+X/Y4.5Out Pins: 110°/s full scale range, 9.1mV/°/s sensitivity
+Vref = 1350±50mV
+Temperature Sensor: Range -20 to +85°C, Sensitivity 4mV/°C, Offset 1.25V at room temperature
 
 Epson XV-3500CB (Z-axis gyroscope) 
 0.67mV/deg/s  Vref=1350+/-30mV
@@ -45,7 +45,7 @@ Epson XV-3500CB (Z-axis gyroscope)
 Bosch BMA150 (3-axis accelerometer) 
 i2c interface
 Acceleration Sensor: 10bit resolution, range -2 to 2G 
-Temperature Sensor: 8bit, 0.5âˆžC/lsb, range -30 to 97.5âˆžC
+Temperature Sensor: 8bit, 0.5°C/lsb, range -30 to 97.5°C
 */
 struct nav_struct
 {

@@ -169,7 +169,7 @@ void nav_Print(struct nav_struct* nav)
 		
 	);
 	
-	printf("%d a=%6.3f,%6.3f,%6.3f m/s² g=%+4.2f,%+4.2f,%+4.2fdeg/s h=%3.0fm dt=%2.0fms\n\n"
+	printf("%d a=%6.3f,%6.3f,%6.3f m/sÂ² g=%+4.2f,%+4.2f,%+4.2fdeg/s h=%3.0fm dt=%2.0fms\n\n"
 		,nav->seq
 		,nav->ax,nav->ay,nav->az
 		,RAD2DEG(nav->gx),RAD2DEG(nav->gy),RAD2DEG(nav->gz)
