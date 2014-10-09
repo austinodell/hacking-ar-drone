@@ -31,68 +31,96 @@
 #include "../gpio/gpio.h"
 #include "../util/util.h"
 
+
+#define GPIO_NAVBOARD 132
+#define READ_SIZE 58
+
+#define NUMBER_SAMPLES_TRIM 200
+
+
+#define GEE 9.81
+
+#define GYRO_RAW_MAX 32767.0
+#define GYRO_VAL_MAX_RADIANS_PER_SEC DEG2RAD(2000.0)
+#define NAVDATA_FLATTRIM_FILENAME "flattrim.dat"
+
 int nav_fd;
 
-float accs_offset[]                    = { 2048, 2048, 2048 };
-const float accs_gains[]               = { 1024, 1024, 1024 };
-float gyros_offset[]                   = { 1350/0.806, 1350/0.806, 1350/0.806 };
-const float gyros_gains[]              = { 6.9786031e-03, 7.1979444e-03, 3.8175473e-03 }; 
-float gyros110_offset[]                = { 1350/0.806, 1350/0.806 };
-const float gyros110_gains[]           = { 1.5517747e-03, 1.5981209e-03 };
+//float accs_offset[]                    = { 2048, 2048, 2048 };
+const float accs_gains[]               = { 512/GEE, 512/GEE, 512/GEE }; // 512 units <-> 1 gee
+//float gyros_offset[]                   = { 0,0,0 };
+const float gyros_gains[]              = { GYRO_VAL_MAX_RADIANS_PER_SEC/GYRO_RAW_MAX,GYRO_VAL_MAX_RADIANS_PER_SEC/GYRO_RAW_MAX,GYRO_VAL_MAX_RADIANS_PER_SEC/GYRO_RAW_MAX }; 
+//float mag_offset[]                     = { 0,0,0 };
+const float mag_gains[]                = { 1.0, 1.0, 1.0  }; 
 
-//const float accs_offset[]                    = { -2.2074473e+03, 1.9672749e+03, 1.9423679e+03 };
-//const float accs_gains[]                     = {  9.6180552e-01,  2.5897421e-02,  5.7041653e-02,  
-//                                                 -1.2127322e-02, -9.9142015e-01,  2.2923036e-02,  
-//												    4.8988122e-02, -4.6047132e-02, -9.6375960e-01 };
-//const float gyros_offset[]                   = { 1.6654420e+03, 1.6706140e+03, 1.6645740e+03 };
-//const float gyros_gains[]                    = { 6.9786031e-03, -7.1979444e-03, -3.8175473e-03 };
-//const float gyros110_offset[]                = { 1.6567020e+03, 1.6819180e+03 };
-//const float gyros110_gains[]                 = { 1.5517747e-03, -1.5981209e-03 };
+struct navdata_flattrim_struct {
+        float accs_offset[3];
+        float gyros_offset[3];
+        float mag_offset[3];
+} flattrim_data;
 
-//get a sample from the nav board (non blocking)
-//returns 0 on success
-int nav_GetSample(nav_struct* nav)
+int nav_LoadFlatTrimData()
+{
+  FILE* fp = fopen(NAVDATA_FLATTRIM_FILENAME, "rb");
+  if (fp) {
+    int result = fread(&flattrim_data, 1, sizeof(flattrim_data), fp) != sizeof(flattrim_data);
+    fclose(fp);
+    return result;
+  } else {
+    return 1;
+  }
+}
+
+int nav_SaveFlatTrimData()
+{
+  FILE* fp = fopen(NAVDATA_FLATTRIM_FILENAME, "wb");
+  if (fp) {
+    int result = fwrite(&flattrim_data, 1, sizeof(flattrim_data), fp) != sizeof(flattrim_data);
+    fclose(fp);
+    return result;
+  } else {
+    return 1;
+  }
+}
+
+
+int safe_read(int fd, void *target, int bytesToRead)
+{
+    int bytesRead=0;
+    char * targetC=(char *)target;
+    while (bytesRead !=bytesToRead) {
+        int bytesRemaining=bytesToRead-bytesRead;
+        int n=read(fd,targetC+bytesRead,bytesRemaining);
+        if(n < 0) return n;
+        bytesRead+=n;
+    }
+    return bytesRead;
+}
+
+int nav_GetSample(struct nav_struct* nav)
 {
 	int n;
-	do {
-		//http://www.easysw.com/~mike/serial/serial.html
-		//When you operate the port in raw data mode, each read(2) system call will return the number 
-		//of characters that are actually available in the serial input buffers. If no characters are 
-		//available the call will return immediately due to fcntl(fd, F_SETFL, FNDELAY)
-		//The FNDELAY option causes the read function to return 0 if no characters are available on the port.
-		n = read(nav_fd, nav, 46);
-		if(n==-1) {
-			perror("error reading");
-			return 1;
-		}
-		else if(n<46) return 1; //no packet received
-	} while(n - 46 > 46);  //loop until last full packet is read
+	u16 size;
+        n = safe_read(nav_fd, &size, 2);
+        if(n!=2) { 
+            printf("Only read %d bytes for size info\n",n);
+            return 1; //no packet received
+        }
+	if(size!=READ_SIZE) {
+	    printf("nav_size is %d, but expected %d\n",size,READ_SIZE);
+	    return 2; //size incorrect
+        }
+        
+        n=safe_read(nav_fd,nav,READ_SIZE);
+        if(n!=READ_SIZE) { 
+            printf("Only read %d bytes for nav struct\n",n);
+            return 3; //no packet received
+        }
+        
 	//check data is valid
-	u16 checksum	
-		=nav->seq
-		+nav->acc[0]
-		+nav->acc[1]
-		+nav->acc[2]
-		+nav->gyro[0]
-		+nav->gyro[1]
-		+nav->gyro[2]
-		+nav->gyro_110[0]
-		+nav->gyro_110[1]
-		+nav->acc_temp
-		+nav->gyro_temp
-		+nav->vrefEpson
-		+nav->vrefIDG
-		+nav->us_echo
-		+nav->us_echo_start
-		+nav->us_echo_end
-		+nav->us_association_echo
-		+nav->us_distance_echo
-		+nav->us_courbe_temps
-		+nav->us_courbe_valeur
-		+nav->us_courbe_ref; 
+	u16 checksum=0; /** @todo calculate checksum */
 	
-	if(nav->size!=44) return 2; //size incorrect
-	if(nav->checksum!=checksum) return 3; //checksum incorrect
+//	if(nav->checksum!=checksum) return 3; //checksum incorrect
 	
 	//store timestamp
 	double ts_prev = nav->ts;
@@ -100,140 +128,162 @@ int nav_GetSample(nav_struct* nav)
 	nav->dt = nav->ts - ts_prev;
 	
 	//store converted sensor data in nav structure. 
-	nav->ax = (((float)nav->acc[0]) - accs_offset[0]) / accs_gains[0];
-	nav->ay = (((float)nav->acc[1]) - accs_offset[1]) / accs_gains[1];
-	nav->az = (((float)nav->acc[2]) - accs_offset[2]) / accs_gains[2];
-	nav->gx = (((float)nav->gyro[0]) - gyros_offset[0]) * gyros_gains[0];
-	nav->gy = (((float)nav->gyro[1]) - gyros_offset[1]) * gyros_gains[1];
-	nav->gz = (((float)nav->gyro[2]) - gyros_offset[2]) * gyros_gains[2];	
-	if(nav->gx>DEG2RAD(-100) && nav->gx<DEG2RAD(100)) nav->gx = ((float)nav->gyro_110[0] - gyros110_offset[0]) * gyros110_gains[0];
-	if(nav->gy>DEG2RAD(-100) && nav->gy<DEG2RAD(100)) nav->gy = ((float)nav->gyro_110[1] - gyros110_offset[1]) * gyros110_gains[1];
-	nav->h  = (float)((nav->us_echo&0x7fff)) * 0.0340;
-  nav->h_meas = nav->us_echo >> 15;
-	nav->tg  = (( (float)nav->gyro_temp * 0.806 /*mv/lsb*/ ) - 1250 /*Offset 1250mV at room temperature*/) / 4.0 /*Sensitivity 4mV/°C*/ + 20 /*room temperature*/;
-	nav->ta  = ((float)nav->acc_temp) * 0.5 /*C/lsb*/ - 30 /*Offset is -30C*/;
-	
+	nav->ax = -(((float)nav->acc[0]) - flattrim_data.accs_offset[0]) / accs_gains[0];
+	nav->ay = (((float)nav->acc[1]) - flattrim_data.accs_offset[1]) / accs_gains[1];
+	nav->az = -(((float)nav->acc[2]) - flattrim_data.accs_offset[2]) / accs_gains[2];
+
+
+	nav->gx = (((float)nav->gyro[0]) - flattrim_data.gyros_offset[0]) * gyros_gains[0];
+	nav->gy = (((float)nav->gyro[1]) - flattrim_data.gyros_offset[1]) * gyros_gains[1];
+	nav->gz = (((float)nav->gyro[2]) - flattrim_data.gyros_offset[2]) * gyros_gains[2];	
+
+	nav->mag_x = (((float)nav->mag[0]) - flattrim_data.mag_offset[0]) * mag_gains[0];
+	nav->mag_y = (((float)nav->mag[1]) - flattrim_data.mag_offset[1]) * mag_gains[1];
+	nav->mag_z = (((float)nav->mag[2]) - flattrim_data.mag_offset[2]) * mag_gains[2];	
+
+
+	nav->h  = (float)((nav->us_echo&0x7fff)) * 0.000340;
+        nav->h_meas = nav->us_echo >> 15;
+
 	return 0;
 }
 
-void nav_Print(nav_struct* nav) 
+void nav_Print(struct nav_struct* nav) 
 {
-/*
-	printf("RAW seq=%d a=%d,%d,%d g=%d,%d,%d,%d,%d h=%d ta=%d tg=%d\n"
+                
+	fprintf(stderr,
+	        "%d,%.3f,%.3f,%.3f,%.2f,%.2f,%.2f,%d,%d,%d\n"
+		,nav->seq
+		,RAD2DEG(nav->gx), RAD2DEG(nav->gy), RAD2DEG(nav->gz)
+		,nav->ax, nav->ay, nav->az
+		,nav->mag[0],nav->mag[1],nav->mag[2]);
+		
+        printf("RAW seq=%d a=%5d,%5d,%5d g=%5d,%5d,%5d unk=%5d,%5d h=%5d \nmag=%5d,%5d,%5d\n"
 		,nav->seq
 		,nav->acc[0],nav->acc[1],nav->acc[2]
-		,nav->gyro[0],nav->gyro[1],nav->gyro[2],nav->gyro_110[0],nav->gyro_110[1]
+		,nav->gyro[0],nav->gyro[1],nav->gyro[2]
+		,nav->unk1
+		,nav->unk2
 		,nav->us_echo
-		,nav->acc_temp
-		,nav->gyro_temp
+		,nav->mag[0],nav->mag[1],nav->mag[2]
+		
 	);
-*/	
-	printf("a=%6.3f,%6.3f,%6.3fG g=%4.0f,%4.0f,%4.0fdeg/s h=%3.0fcm ta=%4.1fC tg=%4.1fC dt=%2.0fms\n"
+	
+	printf("%d a=%6.3f,%6.3f,%6.3f m/s² g=%+4.2f,%+4.2f,%+4.2fdeg/s h=%3.0fm dt=%2.0fms\n\n"
 		,nav->seq
 		,nav->ax,nav->ay,nav->az
 		,RAD2DEG(nav->gx),RAD2DEG(nav->gy),RAD2DEG(nav->gz)
 		,nav->h
-		,nav->ta
-		,nav->tg
 		,nav->dt*1000
 	);
 }
-
 
 //calibrate offsets. Drone has to be horizontal and stationary
 //TODO add timeout
 //returns 0 on success
 int nav_FlatTrim() 
 {
-	accs_offset[0]=2122.639893;
-	accs_offset[1]=1978.560059;
-	accs_offset[2]=2012.040039;
-	gyros_offset[0]=1670.439941;
-	gyros_offset[1]=1664.010010;
-	gyros_offset[2]=1658.079956;
-	gyros110_offset[0]=1690.079956;
-	gyros110_offset[1]=1662.890015;
-	//printf("nav_Calibrate bypassed\n");
-	//return 0;
+        if (nav_LoadFlatTrimData()) {
+          flattrim_data.accs_offset[0]=2048;
+          flattrim_data.accs_offset[1]=2048;
+          flattrim_data.accs_offset[2]=2048;
+          flattrim_data.gyros_offset[0]=0;
+          flattrim_data.gyros_offset[1]=0;
+          flattrim_data.gyros_offset[2]=0;
+          //printf("nav_Calibrate bypassed\n");
+          //return 0;
 
-	nav_struct nav;
-	int n_samples=40;
-	int n=0; //number of samples
-	float x1[8],x2[8]; //sum and sqr sum
-	float avg[8],std[8]; //average and standard deviation
-	int i;
-		
-	//zero sums
-	for(i=0;i<8;i++) {x1[i]=0;x2[i]=0;}
-	
-	//collect n_samples samples 
-	while(n<n_samples) {
-		int retries=0;
-		while(retries<100) {
-			int rc = nav_GetSample(&nav);
-			if(rc==0) break;
-			retries++;
-			printf("nav_Calibrate: retry=%d, code=%d\r\n",retries+n*100,rc); 
-		}
-		n++,
-		x1[0]+=(float)nav.acc[0];
-		x2[0]+=(float)nav.acc[0]*(float)nav.acc[0];
-		x1[1]+=(float)nav.acc[1];
-		x2[1]+=(float)nav.acc[1]*(float)nav.acc[1];
-		x1[2]+=(float)nav.acc[2];
-		x2[2]+=(float)nav.acc[2]*(float)nav.acc[2];
-		x1[3]+=(float)nav.gyro[0];
-		x2[3]+=(float)nav.gyro[0]*(float)nav.gyro[0];
-		x1[4]+=(float)nav.gyro[1];
-		x2[4]+=(float)nav.gyro[1]*(float)nav.gyro[1];
-		x1[5]+=(float)nav.gyro[2];
-		x2[5]+=(float)nav.gyro[2]*(float)nav.gyro[2];
-		x1[6]+=(float)nav.gyro_110[0];
-		x2[6]+=(float)nav.gyro_110[0]*(float)nav.gyro_110[0];
-		x1[7]+=(float)nav.gyro_110[1];
-		x2[7]+=(float)nav.gyro_110[1]*(float)nav.gyro_110[1];
-	}
-	
-	//calc avg and standard deviation
-	for(i=0;i<8;i++) {
-	  avg[i]=x1[i]/n;
-	  std[i]=(x2[i]-x1[i]*x1[i]/n)/(n-1);
-	  if(std[i]<=0) std[i]=0; else std[i]=sqrt(std[i]); //handle rounding errors
-	}
-	
-	//validate
-	for(i=0;i<3;i++) if(std[i]>10) return 1+i; //validate accs
-	for(i=3;i<8;i++) if(std[i]>10) return 1+i; //validate gyros
-	int tol=120;
-	if(avg[0]<2048-tol || avg[0]>2048+tol) {printf("nav_Calibrate: ax_avg out of tolerance: %d\r\n",avg[0]); return 10;}
-	if(avg[1]<2048-tol || avg[1]>2048+tol) {printf("nav_Calibrate: ay_avg out of tolerance: %d\r\n",avg[1]); return 11;}
-	if(avg[2]<3096-tol || avg[2]>3096+tol) {printf("nav_Calibrate: az_avg out of tolerance: %d\r\n",avg[2]); return 12;}
-	
-	//set offsets
-	accs_offset[0]=avg[0];
-	accs_offset[1]=avg[1];
-	accs_offset[2]=avg[2]-accs_gains[2]; 
-	gyros_offset[0]=avg[3];
-	gyros_offset[1]=avg[4];
-	gyros_offset[2]=avg[5];
-	gyros110_offset[0]=avg[6];
-	gyros110_offset[1]=avg[7];
-	
-	printf("nav_Calibrate: accs_offset=%f,%f,%f\n",accs_offset[0],accs_offset[1],accs_offset[2]);
-	printf("nav_Calibrate: gyros_offset=%f,%f,%f\n",gyros_offset[0],gyros_offset[1],gyros_offset[2]);
-	printf("nav_Calibrate: gyros110_offset=%f,%f\n",gyros110_offset[0],gyros110_offset[1]);
-	
+          struct nav_struct nav;
+          int n_samples=NUMBER_SAMPLES_TRIM;
+          int n=0; //number of samples
+          float x1[6],x2[6]; //sum and sqr sum
+          float avg[6],std[6]; //average and standard deviation
+          int i;
+                  
+          //zero sums
+          for(i=0;i<6;i++) {x1[i]=0;x2[i]=0;}
+          
+          //collect n_samples samples 
+          while(n<n_samples) {
+                  int retries=1;
+                  while(retries<100) {
+                          int rc = nav_GetSample(&nav);
+                          if(rc==0) break;
+                          retries++;
+                          printf("nav_Calibrate: retry=%d, code=%d\r\n",retries,rc); 
+                  }
+                  n++,
+                  x1[0]+=(float)nav.acc[0];
+                  x2[0]+=(float)nav.acc[0]*(float)nav.acc[0];
+                  x1[1]+=(float)nav.acc[1];
+                  x2[1]+=(float)nav.acc[1]*(float)nav.acc[1];
+                  x1[2]+=(float)nav.acc[2];
+                  x2[2]+=(float)nav.acc[2]*(float)nav.acc[2];
+                  x1[3]+=(float)nav.gyro[0];
+                  x2[3]+=(float)nav.gyro[0]*(float)nav.gyro[0];
+                  x1[4]+=(float)nav.gyro[1];
+                  x2[4]+=(float)nav.gyro[1]*(float)nav.gyro[1];
+                  x1[5]+=(float)nav.gyro[2];
+                  x2[5]+=(float)nav.gyro[2]*(float)nav.gyro[2];
+          }
+          
+          //calc avg and standard deviation
+          for(i=0;i<6;i++) {
+            avg[i]=x1[i]/n;
+            std[i]=(x2[i]-x1[i]*x1[i]/n)/(n-1);
+            if(std[i]<=0) std[i]=0; else std[i]=sqrt(std[i]); //handle rounding errors
+          }
+          
+          //validate
+          for(i=0;i<3;i++) {
+              if(std[i]>10) {
+                  printf("Std deviation of accel channel %d is too large (%f)\n",i,std[i]);
+                  return 1+i; //validate accs
+              }
+          }
+
+          int tol=1200;
+          if(avg[0]<2048-tol || avg[0]>2048+tol) {printf("nav_Calibrate: ax_avg out of tolerance: %f\r\n",avg[0]); return 10;}
+          if(avg[1]<2048-tol || avg[1]>2048+tol) {printf("nav_Calibrate: ay_avg out of tolerance: %f\r\n",avg[1]); return 11;}
+          
+          float az_min=2048+accs_gains[2]*GEE-tol;
+          float az_max=2048+accs_gains[2]*GEE+tol;
+          
+          if(avg[2]<az_min || avg[2]>az_max) {printf("nav_Calibrate: az_avg out of tolerance: %f < %f < %f \r\n",az_min,avg[2],az_max); return 12;}
+          
+          //set offsets
+          flattrim_data.accs_offset[0]=avg[0];
+          flattrim_data.accs_offset[1]=avg[1];
+          flattrim_data.accs_offset[2]=avg[2]-accs_gains[2]*GEE; //1 gee  
+
+          printf("nav_Calibrate: accs_offset=%f,%f,%f\n",flattrim_data.accs_offset[0],flattrim_data.accs_offset[1],flattrim_data.accs_offset[2]);
+
+
+          for(i=3;i<6;i++) {
+              if(std[i]>10) {
+                  printf("Std deviation of gyro channel %d is too large (%f)\n",i,std[i]);
+                  return 1+i; //validate gyros
+              }
+          }
+
+          flattrim_data.gyros_offset[0]=avg[3];
+          flattrim_data.gyros_offset[1]=avg[4];
+          flattrim_data.gyros_offset[2]=avg[5];
+          
+          printf("nav_Calibrate: gyros_offset=%f,%f,%f\n",flattrim_data.gyros_offset[0],flattrim_data.gyros_offset[1],flattrim_data.gyros_offset[2]);
+          nav_SaveFlatTrimData();
+        }        	
 	return 0;	
 }
 
-int nav_Init(nav_struct* nav) {
+int nav_Init(struct nav_struct* nav) {
 	//open nav port
-	//stty -F /dev/ttyO1 460800 -parenb -parodd cs8 -hupcl -cstopb cread clocal -crtscts 
+	//stty -F /dev/ttyPA2 460800 -parenb -parodd cs8 -hupcl -cstopb cread clocal -crtscts 
 	//-ignbrk -brkint -ignpar -parmrk -inpck -istrip -inlcr -igncr -icrnl -ixon -ixoff -iuclc -ixany -imaxbel 
 	//-opost -olcuc -ocrnl onlcr -onocr -onlret -ofill -ofdel nl0 cr0 tab0 bs0 vt0 ff0 -isig -icanon -iexten 
 	//-echo echoe echok -echonl -noflsh -xcase -tostop -echoprt echoctl echoke
 
-	nav_fd = open("/dev/ttyO1", O_RDWR | O_NOCTTY | O_NDELAY | ~O_NONBLOCK);
+	nav_fd = open("/dev/ttyO1", O_RDWR | O_NOCTTY | O_NDELAY);
 	if (nav_fd == -1)
 	{
 		perror("nav_Init: Unable to open /dev/ttyO1 - ");
@@ -357,18 +407,27 @@ FF1 Delay 2 seconds after sending FFs
 	tcsetattr(nav_fd, TCSANOW, &options);
   
 	//set /MCLR pin
-	gpio_set(132,1);
+	gpio_set(GPIO_NAVBOARD,1);
 	
 	//start acquisition
-	u08 cmd='\2';
-	write(nav_fd,&cmd,1);
-	
-	cmd='\3';
+	u08 cmd=0x01;
 	write(nav_fd,&cmd,1);
   
 	//init nav structure	
-    nav->ts = util_timestamp();
-    nav->dt = 0;
+	nav->ts = util_timestamp();
+	nav->dt = 0;
+    
+        int i=0;
+        while(i<100) {
+          int rc;
+          struct nav_struct nav;
+
+          rc=nav_GetSample(&nav);
+          if(rc==0) break;
+          // read a byte to change the phase
+          safe_read(nav_fd, &rc, 1);
+        
+        }
 	
 	return 0;
 }

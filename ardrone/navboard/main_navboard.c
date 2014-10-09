@@ -36,7 +36,7 @@
 int main()
 {
 	int rc;
-	nav_struct nav;
+	struct nav_struct nav;
 	
 	printf("Nav board test program\r\n");
 
@@ -49,10 +49,11 @@ int main()
 	//calibrate
 	printf("Calibration ...\r\n");
 	rc=nav_FlatTrim();
-	if(rc) {printf("Failed: retcode=%d\r\n",rc); return rc;}
+	if(rc) {printf("FlatTrim Failed: retcode=%d\r\n",rc); return rc;}
 	printf("Calibration OK\r\n");
 	 
 	//main loop	
+	fprintf(stderr, "seq,gx,gy,gz,ax,ay,az,mx,my,mz\n");
 	while(1) { 
 		//get sample
 		rc = nav_GetSample(&nav);

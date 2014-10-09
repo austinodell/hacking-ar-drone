@@ -45,6 +45,9 @@ void ars_Init(struct ars_Gyro1DKalman *ars, double Q_angle, double Q_gyro, doubl
 	ars->Q_angle = Q_angle;
 	ars->Q_gyro  = Q_gyro;
 	ars->R_angle = R_angle;
+	ars->x_bias = ars->x_angle = ars->P_01 = ars->P_10 = 0;
+	ars->P_00 = 100.0;
+	ars->P_11 = 5.0;
 }
 
 /*

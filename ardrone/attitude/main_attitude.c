@@ -36,7 +36,7 @@
 int main()
 {
 	int rc;
-	att_struct att;
+	struct att_struct att;
 	
 	printf("Attitude Estimate test program\r\n");
 
