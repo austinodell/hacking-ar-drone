@@ -61,8 +61,11 @@ int nav_GetSample(nav_struct* nav)
 		//available the call will return immediately due to fcntl(fd, F_SETFL, FNDELAY)
 		//The FNDELAY option causes the read function to return 0 if no characters are available on the port.
 		n = read(nav_fd, nav, 46);
-		if(n==-1) perror("error reading");
-		if(n<46) return n; //no packet received
+		if(n==-1) {
+			perror("error reading");
+			return 1;
+		}
+		else if(n<46) return 1; //no packet received
 	} while(n - 46 > 46);  //loop until last full packet is read
 	//check data is valid
 	u16 checksum	
@@ -165,12 +168,12 @@ int nav_FlatTrim()
 	
 	//collect n_samples samples 
 	while(n<n_samples) {
-		int retries=1;
+		int retries=0;
 		while(retries<100) {
 			int rc = nav_GetSample(&nav);
 			if(rc==0) break;
 			retries++;
-			printf("nav_Calibrate: retry=%d, code=%d\r\n",retries+(n*100),rc); 
+			printf("nav_Calibrate: retry=%d, code=%d\r\n",retries+n*100,rc); 
 		}
 		n++,
 		x1[0]+=(float)nav.acc[0];
@@ -230,7 +233,7 @@ int nav_Init(nav_struct* nav) {
 	//-opost -olcuc -ocrnl onlcr -onocr -onlret -ofill -ofdel nl0 cr0 tab0 bs0 vt0 ff0 -isig -icanon -iexten 
 	//-echo echoe echok -echonl -noflsh -xcase -tostop -echoprt echoctl echoke
 
-	nav_fd = open("/dev/ttyO1", O_RDWR | O_NOCTTY | O_NDELAY);
+	nav_fd = open("/dev/ttyO1", O_RDWR | O_NOCTTY | O_NDELAY | ~O_NONBLOCK);
 	if (nav_fd == -1)
 	{
 		perror("nav_Init: Unable to open /dev/ttyO1 - ");
@@ -357,7 +360,10 @@ FF1 Delay 2 seconds after sending FFs
 	gpio_set(132,1);
 	
 	//start acquisition
-	u08 cmd=0x01;
+	u08 cmd='\2';
+	write(nav_fd,&cmd,1);
+	
+	cmd='\3';
 	write(nav_fd,&cmd,1);
   
 	//init nav structure	

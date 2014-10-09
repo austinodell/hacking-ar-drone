@@ -6,7 +6,7 @@ all: clean attitude
 setup:
 	mkdir -p ../bin/attitude
 
-attitude: setup $(LOC) ../util/util.c ../gpio/gpio.c ../navboard/navboard.c ars.c attitude.c main_attitude.c
+attitude: setup ../util/util.c ../gpio/gpio.c ../navboard/navboard.c ars.c attitude.c main_attitude.c
 	$(LOC) -o ../bin/attitude/attitude ../util/util.c ../gpio/gpio.c ../navboard/navboard.c ars.c attitude.c main_attitude.c
 
 clean:

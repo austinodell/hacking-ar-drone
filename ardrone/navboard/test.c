@@ -17,6 +17,10 @@ int main() {
 		return 101;
 	} else {
 		printf("Successfully opened file descriptor: nav_fd code = %d\r\n\n",nav_fd);
+		
+		/*uint8_t cmd=0x01;
+		write(nav_fd,&cmd,1);
+		*/
 		n = read(nav_fd, nav, 46);
 		if(n == -1) {
 			perror("error reading file descriptor");

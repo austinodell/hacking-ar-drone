@@ -6,7 +6,7 @@ all: clean vbat
 setup:
 	mkdir -p ../bin/vbat
 
-vbat: setup $(LOC) vbat.c main_vbat.c
+vbat: setup vbat.c main_vbat.c
 	$(LOC) -o ../bin/vbat/vbat vbat.c main_vbat.c
 
 clean:

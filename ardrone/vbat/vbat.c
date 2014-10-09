@@ -57,27 +57,27 @@ float vbat_get(unsigned char channel)
 
 int vbat_init(vbat_struct *vbat)
 {
-	fd = open( "/dev/i2c-0", O_RDWR );
+	fd = open( "/dev/i2c-1", O_RDWR );
 
 	if( ioctl( fd, I2C_SLAVE, VBAT_ADDRESS ) < 0 )
 	{
-	fprintf( stderr, "Failed to set slave address: %m\n" );
-	return 1;
+		perror("(1) Failed to set slave address");
+		return 1;
 	}
 
 	//ADC_CTRL
 	if( i2c_smbus_write_byte_data( fd, 0x30, 0xc7))   {	
-		fprintf( stderr, "Failed to write to I2C device\n" );
+		perror("(2) Failed to write to I2C device");
 		return 2;
 	}
 	//ADC_MUX_1
 	if( i2c_smbus_write_byte_data( fd, 0x31, 0x5f)){	
-		fprintf( stderr, "Failed to write to I2C device\n" );
+		perror("(3) Failed to write to I2C device");
 		return 3;
 	} 
 	//ADC_MUX_2
 	if( i2c_smbus_write_byte_data( fd, 0x32, 0x0f))  {	
-		fprintf( stderr, "Failed to write to I2C device\n" );
+		perror("(4) Failed to write to I2C device");
 		return 4;
 	}
 

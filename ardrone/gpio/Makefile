@@ -6,7 +6,7 @@ all: clean gpio
 setup:
 	mkdir -p ../bin/gpio
 
-gpio: setup $(LOC) ../util/util.c gpio.c main_gpio.c
+gpio: setup ../util/util.c gpio.c main_gpio.c
 	$(LOC) -o ../bin/gpio/gpio ../util/util.c gpio.c main_gpio.c
 
 clean:
