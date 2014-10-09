@@ -1,0 +1,8 @@
+#!/bin/sh
+
+echo 8 > /proc/sys/kernel/printk
+killall program.elf 2> /dev/null
+cd /data/video/usb1
+export PATH="$PATH:/data/video/usb1"
+vbat
+sh

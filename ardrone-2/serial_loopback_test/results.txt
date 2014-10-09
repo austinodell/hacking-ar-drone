@@ -1,0 +1,4 @@
+1 byte => 0.0 - 0.06 ms for sending, 0.45-0.7 ms for receiving
+50 byte => 0.09-0.3 ms for sending, 4.5 - 5.0 ms for receing (=> around 10kbyte/sec, which matches roughly 115200)
+
+
