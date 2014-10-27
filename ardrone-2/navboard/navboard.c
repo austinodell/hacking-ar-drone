@@ -152,13 +152,13 @@ void nav_Print(struct nav_struct* nav)
 {
                 
 	fprintf(stderr,
-	        "%d,%.3f,%.3f,%.3f,%.2f,%.2f,%.2f,%d,%d,%d\n"
+	        "Sequnce: %d, Gx: %.3f, Gy: %.3f, Gz: %.3f, Ax: %.2f, Ay: %.2f, Az: %.2f, Mag[0]: %d, Mag[1] %d, Mag[2] %d\n"
 		,nav->seq
 		,RAD2DEG(nav->gx), RAD2DEG(nav->gy), RAD2DEG(nav->gz)
 		,nav->ax, nav->ay, nav->az
 		,nav->mag[0],nav->mag[1],nav->mag[2]);
 		
-        printf("RAW seq=%d a=%5d,%5d,%5d g=%5d,%5d,%5d unk=%5d,%5d h=%5d \nmag=%5d,%5d,%5d\n"
+        printf("RAW Sequence: %d, a: %5d,%5d,%5d, g: %5d,%5d,%5d, unk: %5d,%5d, h: %5d \nmag=%5d,%5d,%5d\n"
 		,nav->seq
 		,nav->acc[0],nav->acc[1],nav->acc[2]
 		,nav->gyro[0],nav->gyro[1],nav->gyro[2]

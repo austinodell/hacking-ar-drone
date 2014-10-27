@@ -61,6 +61,7 @@ int main()
 			printf("ERROR: nav_GetSample return code=%d\n",rc); 
 		}
 		nav_Print(&nav);
+		sleep(1);
 	}
 	nav_Close();
 	printf("\nDone...\n");

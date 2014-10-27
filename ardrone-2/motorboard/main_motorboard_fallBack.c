@@ -11,7 +11,7 @@
 
 int main()
 {
-  printf("Back motors set to 60% and forward motors set to 40%\r\n");
+  printf("Back motors set to 60% and front motors set to 40%\r\n");
 	
   mot_Init();
   

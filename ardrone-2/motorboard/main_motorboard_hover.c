@@ -11,7 +11,7 @@
 
 int main()
 {
-  printf("All motors at 50%\r\n");
+  printf("All motors at 20%\r\n");
 	
   mot_Init();
   
