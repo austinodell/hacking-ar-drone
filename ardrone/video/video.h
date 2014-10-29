@@ -21,6 +21,9 @@
 #ifndef _VIDEO_H
 #define _VIDEO_H
 
+#include <sys/types.h>
+
+
 struct buffer_struct {
     void * buf;
     size_t length;
@@ -32,6 +35,7 @@ struct img_struct {
 	unsigned char *buf;
 	int w;
 	int h;
+	int bytesPerPixel;
 };
 
 struct vid_struct {
@@ -43,16 +47,21 @@ struct vid_struct {
 	
 //private members	
 	int trigger;
-	img_struct *img;
-	buffer_struct * buffers;
+	struct img_struct *img;
+	struct buffer_struct * buffers;
 	int fd;
 };
 
 
-int video_Init(vid_struct *vid);
+
+
+
+int video_Init(struct vid_struct *vid);
 //create a new blank image
-img_struct *video_CreateImage(vid_struct *vid);
+struct img_struct *video_CreateImage(struct vid_struct *vid, int bytesPerPixel);
 //grabs next B&W image from stream (blocking)
-void video_GrabImage(vid_struct *vid, img_struct *img);
-void video_Close(vid_struct *vid);
+void video_GrabImageGrey(struct vid_struct *vid, struct img_struct *img);
+void video_Close(struct vid_struct *vid);
+void uyvyToGrey(unsigned char *dst, unsigned char *src, unsigned int numberPixels);
+void write_pgm(struct img_struct *img, char *fn);
 #endif
