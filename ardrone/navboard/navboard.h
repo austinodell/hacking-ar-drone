@@ -52,7 +52,7 @@ struct nav_struct
 //	u16 size;                // Size of the following data (always 0x2C)  // not read into struct anymore
 	u16 seq;                 // Sequence number, increases every update 
 	u16 acc[3];              // Raw data (10-bit) of the accelerometers multiplied by 4 
-	s16 gyro[3];             // Raw data for the gyros, 16-bit gyro values
+	u16 gyro[3];             // Raw data for the gyros, 16-bit gyro values
 	u16 unk1;    
         u16 unk2;
 	u16 us_echo;             // bit15=1 echo pulse transmitted, bit14-0 first echo. Value 30 = 1cm. min value: 784 = 26cm
@@ -71,7 +71,7 @@ struct nav_struct
 	u16 unk5;
 	u16 unk6;
 	u16 unk7;
-	s16 mag[3];
+	u16 mag[3];
 	u16 unk8; 		 // unknown
 
 	
