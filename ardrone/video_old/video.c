@@ -112,6 +112,7 @@ int video_Init(vid_struct *vid)
 
     if (ioctl(vid->fd, VIDIOC_QUERYCAP, &cap) < 0) {
 		printf("ioctl() VIDIOC_QUERYCAP failed.\n");
+		printf("Error (%i): %s\n", errno, strerror( errno ));
 		return -1;    
     }
 
@@ -125,6 +126,7 @@ int video_Init(vid_struct *vid)
 
     if (ioctl(vid->fd, VIDIOC_S_FMT, &fmt) < 0) {
 		printf("ioctl() VIDIOC_S_FMT failed.\n");
+		printf("Error (%i): %s\n", errno, strerror( errno ));
 		return -1;    
     }
 
@@ -139,7 +141,8 @@ int video_Init(vid_struct *vid)
 
     if (ioctl(vid->fd, VIDIOC_REQBUFS, &req) < 0) {
 		printf("ioctl() VIDIOC_REQBUFS failed.\n");
-		return -1;    
+		printf("Error (%i): %s\n", errno, strerror( errno ));
+		return -1;   
     }
 
     printf("Buffer count = %d\n", vid->n_buffers);
@@ -156,6 +159,7 @@ int video_Init(vid_struct *vid)
 
 		if (ioctl(vid->fd, VIDIOC_QUERYBUF, &buf) < 0) {
 			printf("ioctl() VIDIOC_QUERYBUF failed.\n");
+			printf("Error (%i): %s\n", errno, strerror( errno ));
 			return -1;    
 		}
 

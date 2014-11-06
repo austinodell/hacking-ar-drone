@@ -181,7 +181,8 @@ void *video_thread_main(void* data)
 		if(vid->trigger) {
 			vid->img->timestamp = util_timestamp();
 			vid->img->seq = vid->seq;
-			uyvyToGrey(vid->img->buf, vid->buffers[buf.index].buf, vid->w*vid->h);
+			//uyvyToGrey(vid->img->buf, vid->buffers[buf.index].buf, vid->w*vid->h);
+			memcpy(vid->img->buf, vid->buffers[buf.index].buf, vid->w*vid->h);
 			vid->trigger=0;
 		}
 	
@@ -251,17 +252,31 @@ void uyvyToGrey(unsigned char *dst, unsigned char *src,  unsigned int numberPixe
 	}
 }
 
-void write_pgm(struct img_struct *greyImg, char *fn)
+void new_write_pic(struct img_struct *Img, short *fn) {
+	int ok = 0;
+	
+	if(write_tiff_image(file_name, array)) {
+		ok = 1;
+	}
+	
+	if(ok == 0) {
+		printf("\nERROR could not write file %s",file_name);
+		exit(1);
+	}
+}
+
+
+void write_pic(struct img_struct *Img, char *fn)
 {
   FILE *fp=fopen(fn,"w");
   if(fp==NULL) {
-    perror("Open pgm for writing");
+    perror("Open pic for writing");
     return;
   }
   fprintf(fp,"P5\n");
-  fprintf(fp,"%d %d\n",greyImg->w, greyImg->h);
+  fprintf(fp,"%d %d\n",Img->w, Img->h);
   fprintf(fp,"255\n");
-  fwrite(greyImg->buf, greyImg->w,greyImg->h,fp);
+  fwrite(Img->buf, Img->w,Img->h,fp);
   fclose(fp);
 
 }

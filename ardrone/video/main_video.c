@@ -48,8 +48,9 @@ int main(int argc,char ** argv)
 
 
 		char fn[100];
-		snprintf(fn,100,"pgm_%d.pgm",img_new->seq);
-		write_pgm(img_new,fn);
+		snprintf(fn,100,"pic_%d",img_new->seq);
+		//new_write_pic(img_new,fn);
+		write_pic(img_new,fn);
 
 		//process
 		video_blocksum(img_old, img_new, &dx, &dy);

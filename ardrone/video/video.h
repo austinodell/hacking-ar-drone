@@ -63,5 +63,5 @@ struct img_struct *video_CreateImage(struct vid_struct *vid, int bytesPerPixel);
 void video_GrabImageGrey(struct vid_struct *vid, struct img_struct *img);
 void video_Close(struct vid_struct *vid);
 void uyvyToGrey(unsigned char *dst, unsigned char *src, unsigned int numberPixels);
-void write_pgm(struct img_struct *img, char *fn);
+void write_pic(struct img_struct *img, char *fn);
 #endif

@@ -7,7 +7,7 @@ setup:
 	mkdir -p ../bin/video
 
 video: setup ../util/util.c video.c main_video.c
-	$(LOC) -o ../bin/video/video -lpthread ../util/util.c video.c main_video.c blocksum.c
+	$(LOC) -o ../bin/video/video -lpthread ../util/util.c video.c main_video.c
 
 clean:
 	rm -rf ../bin/video
