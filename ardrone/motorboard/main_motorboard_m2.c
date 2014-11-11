@@ -11,16 +11,13 @@
 
 int main()
 {
-  printf("Motor 2 on at 30%\r\n");
+  printf("Motor 2 on at 20% for 5 seconds.\r\n");
 	
   mot_Init();
-  
-  float throttle1 = 0;
-  float throttle2 = .30;
-  float throttle3 = 0;
-  float throttle4 = 0;
 
-  mot_Run(throttle1,throttle2,throttle3,throttle4);
+  float throttle = .2;
+
+  mot_Run(0,throttle,0,0);
 
   sleep(5);
  
