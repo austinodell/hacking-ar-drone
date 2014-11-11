@@ -11,3 +11,5 @@ navboard: setup ../util/util.c ../gpio/gpio.c navboard.c main_navboard.c
 
 clean:
 	rm -rf ../bin/navboard
+
+.PHONY: all

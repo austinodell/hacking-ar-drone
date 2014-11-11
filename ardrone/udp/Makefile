@@ -14,3 +14,5 @@ udpclient: setup udp.c main_udpclient.c
 
 clean:
 	rm -rf ../bin/udp
+
+.PHONY: all

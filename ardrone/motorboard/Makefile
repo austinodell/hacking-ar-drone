@@ -1,7 +1,7 @@
 FILE = ../compiler_loc.dat
 LOC = $(shell cat ${FILE})
 
-all: clean original allOn forward left back right hover m1 m2 m3 m4 ledoff
+all: clean original allOn forward left back right hover m1 m2 m3 m4 ledoff ledgreen
 
 setup:
 	mkdir -p ../bin/motorboard/
@@ -54,5 +54,11 @@ ledoff: setup motorboard.c mot.c ../gpio/gpio.c ../util/util.c main_motorboard_l
 	rm -f ../bin/motorboard/motorboard_leds_off
 	$(LOC) -lpthread -o ../bin/motorboard/motorboard_leds_off motorboard.c mot.c ../gpio/gpio.c ../util/util.c main_motorboard_leds_off.c
 
+ledgreen: setup motorboard.c mot.c ../gpio/gpio.c ../util/util.c main_motorboard_leds_green.c
+	rm -f ../bin/motorboard/motorboard_leds_off
+	$(LOC) -lpthread -o ../bin/motorboard/motorboard_leds_green motorboard.c mot.c ../gpio/gpio.c ../util/util.c main_motorboard_leds_green.c
+
 clean:
 	rm -rf ../bin/motorboard
+
+.PHONY: all

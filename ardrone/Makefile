@@ -1,4 +1,4 @@
-all: clean attitude fly gpio motorboard navboard vbat video
+all: clean attitude gpio motorboard navboard vbat
 	clear
 
 attitude: attitude/Makefile
@@ -27,3 +27,5 @@ video: video/Makefile
 
 clean:
 	rm -rf bin
+
+.PHONY: all

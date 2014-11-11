@@ -11,3 +11,5 @@ fly: setup ../udp/udp.c ../util/util.c ../gpio/gpio.c ../motorboard/mot.c ../mot
 
 clean:
 	rm -rf ../bin/fly
+
+.PHONY: all

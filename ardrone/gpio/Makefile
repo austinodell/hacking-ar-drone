@@ -11,3 +11,5 @@ gpio: setup ../util/util.c gpio.c main_gpio.c
 
 clean:
 	rm -rf ../bin/gpio
+
+.PHONY: all

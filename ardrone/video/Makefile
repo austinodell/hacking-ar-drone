@@ -11,3 +11,5 @@ video: setup ../util/util.c video.c main_video.c
 
 clean:
 	rm -rf ../bin/video
+
+.PHONY: all

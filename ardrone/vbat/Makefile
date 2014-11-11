@@ -11,3 +11,5 @@ vbat: setup vbat.c main_vbat.c
 
 clean:
 	rm -rf ../bin/vbat
+
+.PHONY: all
