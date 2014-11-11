@@ -22,9 +22,6 @@ int main()
 
   mot_Run(throttle1,throttle2,throttle3,throttle4);
 
-  //yield to other threads
-  //pthread_yield();
-
   sleep(5);
  
   mot_Close();
