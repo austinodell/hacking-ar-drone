@@ -11,7 +11,7 @@
 
 int main()
 {
-  printf("All motors at 50%\r\n");
+  printf("Motors 1 and 2 set to 60% and Motors 3 and 4 set to 40% for 5 seconds.\r\n");
 	
   mot_Init();
   
@@ -21,9 +21,6 @@ int main()
   float throttle4 = .40;
 
   mot_Run(throttle1,throttle2,throttle3,throttle4);
-
-  //yield to other threads
-  pthread_yield();
 
   sleep(5);
  
