@@ -11,19 +11,13 @@
 
 int main()
 {
-  printf("All motors at 50%\r\n");
+  printf("All motors at 35% for 5 seconds.\r\n");
 	
   mot_Init();
   
-  float throttle1 = .20;
-  float throttle2 = .20;
-  float throttle3 = .20;
-  float throttle4 = .20;
+  float throttle = .35;
 
-  mot_Run(throttle1,throttle2,throttle3,throttle4);
-
-  //yield to other threads
-  pthread_yield();
+  mot_Run(throttle,throttle,throttle,throttle);
 
   sleep(5);
  
