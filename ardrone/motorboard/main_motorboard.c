@@ -38,7 +38,7 @@ int main()
 {
   printf("Motorboard Test Program ... Press q to quit\r\n");
   printf("Motor: 1,2,3,4=run single motor at 50%  5=run all motors at 50% ,=throttle up 1%  .=throttle down 1%  space=stop\r\n");
-  printf("Leds:  a=loff  s=green  d=orange  f=red\r\n");
+  printf("Leds:  a=loff  s=green  d=orange  f=red\n");
 	
   mot_Init();
   
@@ -129,9 +129,6 @@ int main()
 		printf("\rLeds red            ");
 		mot_SetLeds(MOT_LEDRED,MOT_LEDRED,MOT_LEDRED,MOT_LEDRED);
 	}
-	
-	//yield to other threads
-	pthread_yield();
   }
   mot_Close();
   printf("\nDone...\n");
