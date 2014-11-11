@@ -11,24 +11,27 @@
 
 int main()
 {
-  printf("All motors at 50%\r\n");
+  printf("All motors at 10% for 5 seconds.\r\n");
 	
   mot_Init();
   
-  float throttle1 = .50;
-  float throttle2 = .50;
-  float throttle3 = .50;
-  float throttle4 = .50;
+  float throttle1 = .1;
+  float throttle2 = .1;
+  float throttle3 = .1;
+  float throttle4 = .1;
 
   mot_Run(throttle1,throttle2,throttle3,throttle4);
 
-  //yield to other threads
-  pthread_yield();
+  int count = 5;
+  while(count>0) {
+	printf('%i...',count--);
+	fflush(stdout);
+	sleep(1);
+  }  
 
-  sleep(5);
+  printf('%i...Done!\n',count);
  
   mot_Close();
 
-  printf("\nDone...\n");
   return 0;
 }
