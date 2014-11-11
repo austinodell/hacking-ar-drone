@@ -11,13 +11,11 @@
 
 int main()
 {
-  printf("LEDs off");
+  printf("LEDs green for 5 seconds.\r\n");
 	
   mot_Init();
 
   mot_SetLeds(MOT_LEDGREEN,MOT_LEDGREEN,MOT_LEDGREEN,MOT_LEDGREEN);
-
-  pthread_yield();
 
   sleep(5);
  
