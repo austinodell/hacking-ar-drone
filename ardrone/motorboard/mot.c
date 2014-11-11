@@ -165,3 +165,14 @@ void mot_Close()
 {
   motorboard_Close();
 }
+
+void sleeper(int seconds)
+{
+	while(seconds>0) {
+		printf("%i...",seconds--);
+		fflush(stdout);
+		sleep(1);
+	}  
+
+	printf("%i...Done!\n",seconds);
+}

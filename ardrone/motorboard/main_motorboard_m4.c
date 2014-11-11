@@ -19,14 +19,7 @@ int main()
 
   mot_Run(0,0,0,throttle);
 
-  int count = 5;
-  while(count>0) {
-	printf("%i...",count--);
-	fflush(stdout);
-	sleep(1);
-  }  
-
-  printf("%i...Done!\n",count);
+  sleeper(5);
  
   mot_Close();
 

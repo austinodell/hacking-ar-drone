@@ -17,14 +17,7 @@ int main()
 
   mot_SetLeds(MOT_LEDOFF,MOT_LEDOFF,MOT_LEDOFF,MOT_LEDOFF);
 
-  int count = 5;
-  while(count>0) {
-	printf("%i...",count--);
-	fflush(stdout);
-	sleep(1);
-  }  
-
-  printf("%i...Done!\n",count);
+  sleeper(5);
  
   mot_Close();
 

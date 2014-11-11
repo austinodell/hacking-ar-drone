@@ -31,5 +31,6 @@ void mot_Stop();
 void mot_Run(float m0, float m1, float m2, float m3);
 void mot_GetMot(float *m);
 void mot_Close();
+void sleeper(int);
 
 #endif
