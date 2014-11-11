@@ -1,0 +1,6 @@
+#!/bin/bash
+
+read -e -p "UYVY Image File (.bin): " SOURCE
+NEWNAME=${SOURCE%%.bin}
+
+curl -T $SOURCE -o $NEWNAME.bmp http://api.odell.cc/uyvy.php
