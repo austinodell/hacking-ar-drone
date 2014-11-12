@@ -9,6 +9,8 @@
 #include <errno.h>
 #include <arpa/inet.h>
 #include <sys/stat.h>
+#include <sys/uio.h>
+#include <fcntl.h>
 
 #define INPUTSIZE 2500
 
