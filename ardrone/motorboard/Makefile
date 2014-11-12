@@ -1,7 +1,7 @@
 FILE = ../compiler_loc.dat
 LOC = $(shell cat ${FILE})
 
-all: clean original allOn forward left back right hover m1 m2 m3 m4 ledoff ledgreen
+all: clean original allOn forward left back right hover m1 m2 m3 m4 ledoff ledgreen socket
 
 setup:
 	mkdir -p ../bin/motorboard/
@@ -57,6 +57,20 @@ ledoff: setup motorboard.c mot.c ../gpio/gpio.c ../util/util.c main_motorboard_l
 ledgreen: setup motorboard.c mot.c ../gpio/gpio.c ../util/util.c main_motorboard_leds_green.c
 	rm -f ../bin/motorboard/motorboard_leds_off
 	$(LOC) -lpthread -o ../bin/motorboard/motorboard_leds_green motorboard.c mot.c ../gpio/gpio.c ../util/util.c main_motorboard_leds_green.c
+
+socket: setup motorboard.c mot.c ../gpio/gpio.c ../util/util.c motor_socket.c
+	rm -f ../bin/motorboard/motor_socket
+	#$(LOC) -c motorboard.c mot.c
+	#$(LOC) -c -o ../gpio/gpio.o ../gpio/gpio.c
+	#$(LOC) -c -o ../util/util.o ../util/util.c
+	#arm-none-linux-gnueabi-g++ -c motor_socket.c -l motorboard.o mot.o ../gpio/gpio.o ../util/util.o
+	#$(LOC) -lpthread -o ../bin/motorboard/motor_socket motorboard.o mot.o ../gpio/gpio.o ../util/util.o motor_socket.o
+	#$(LOC) -lpthread -o ../bin/motorboard/motor_socket motorboard.c mot.c ../gpio/gpio.c ../util/util.c motor_socket.o
+	$(LOC) -lpthread -o ../bin/motorboard/motor_socket motorboard.c mot.c ../gpio/gpio.c ../util/util.c motor_socket.c
+
+socket2: setup motorboard.c mot.c ../gpio/gpio.c ../util/util.c motor_socket.c
+	rm -f ../bin/motorboard/motor_socket
+	arm-none-linux-gnueabi-g++ -o ../bin/motorboard/motor_socket motorboard.c mot.c ../gpio/gpio.c ../util/util.c motor_socket.c
 
 clean:
 	rm -rf ../bin/motorboard
