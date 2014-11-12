@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
 		
 		if(strcmp(input,"z") == 0) {
 	        
-			sleep(1);
+			sleep(5);
 			char imgBuffer[1843200];
 			bzero(imgBuffer,1843200);
 			recv(sockfd, imgBuffer, 1843200, 0);
