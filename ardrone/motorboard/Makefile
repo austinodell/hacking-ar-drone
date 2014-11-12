@@ -61,6 +61,8 @@ ledgreen: setup motorboard.c mot.c ../gpio/gpio.c ../util/util.c main_motorboard
 socket: setup motorboard.c mot.c ../gpio/gpio.c ../util/util.c motor_socket.c
 	rm -f ../bin/motorboard/motor_socket
 	$(LOC) -lpthread -o ../bin/motorboard/motor_socket motorboard.c mot.c ../vbat/vbat.c ../gpio/gpio.c ../util/util.c motor_socket.c
+	rm -f socket_client
+	gcc -o socket_client socket_client.c
 
 clean:
 	rm -rf ../bin/motorboard

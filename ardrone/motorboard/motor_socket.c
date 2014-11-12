@@ -8,11 +8,14 @@
 #include <stdlib.h>
 #include <string.h>
 #include <pthread.h>
+#include <sys/stat.h>
 
 #include "../util/type.h"
 #include "../util/util.h"
 #include "mot.h"
 #include "../vbat/vbat.h"
+
+size_t getFilesize(const char* filename);
 
 int main( int argc, char *argv[] )
 {
@@ -190,6 +193,22 @@ int main( int argc, char *argv[] )
 			write(newsockfd,"Bottom Camera Saved",19);
 			printf("\rBottom Camera Saved");
 			system("yavta -c1 --file=back -f UYVY -s 320x240 /dev/video0");
+			int fsize = getFilesize("back.bin");
+			int a = 0;
+			char contents[fsize], ch;
+			FILE *camera;
+
+			camera = fopen("back.bin","r");
+			
+			if(camera != NULL) {
+				while((ch = fgetc(camera)) != EOF) {
+					contents[a++] = ch;
+				}
+			}
+			
+			fclose(camera);
+			
+			write(newsockfd,&contents,fsize);
 		}
 		if(c=='v') {
 			char tmp[100];
@@ -223,12 +242,13 @@ int main( int argc, char *argv[] )
 		perror("ERROR writing to socket");
 		exit(1);
 	}
-	
-	/*n = close(newsockfd);
-	if(n < 0)
-	{
-		perror("ERROR closing socket");
-		exit(1);
-	}*/
 	return 0; 
+}
+
+size_t getFilesize(const char* filename) {
+	struct stat st;
+	if(stat(filename, &st) != 0) {
+		return 0;
+	}
+	return st.st_size;   
 }

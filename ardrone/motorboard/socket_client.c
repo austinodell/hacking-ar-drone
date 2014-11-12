@@ -22,6 +22,7 @@ int main(int argc, char *argv[])
 		int sockfd = 0, n = 0;
 		char recvBuff[1024];
 		char buffer[256];
+		char imgBuffer[4000000];
 		struct sockaddr_in serv_addr; 
 
 		if(argc != 3)
@@ -62,6 +63,15 @@ int main(int argc, char *argv[])
 		bzero(buffer,256);
 		read(sockfd,buffer,255);
 		printf("%s\n",buffer);
+		
+		if(strcmp(input,"z") == 0 || strcmp(input,"x") == 0) {
+			sleep(1);
+			read(sockfd,imgBuffer,4000000);
+			FILE * pFile;
+			pFile = fopen ("frame.bin", "wb");
+			fwrite (imgBuffer , sizeof(char), sizeof(imgBuffer), pFile);
+			fclose (pFile);
+		}
 		
 		shutdown(sockfd,SHUT_RDWR);
 		close(sockfd);
