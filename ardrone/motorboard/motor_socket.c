@@ -9,6 +9,11 @@
 #include <string.h>
 #include <pthread.h>
 #include <sys/stat.h>
+#include <sys/sendfile.h>
+#include <errno.h>
+#include <arpa/inet.h>
+#include <netinet/in.h>
+#include <fcntl.h>
 
 #include "../util/type.h"
 #include "../util/util.h"
@@ -25,6 +30,7 @@ int main( int argc, char *argv[] )
 	struct sockaddr_in serv_addr, cli_addr;
 	int  n;
 	vbat_struct vbat;
+	struct stat stat_buf;
 
 	/* First call to socket() function */
 	sockfd = socket(AF_INET, SOCK_STREAM, 0);
@@ -187,37 +193,42 @@ int main( int argc, char *argv[] )
 		if(c=='z') {
 			write(newsockfd,"Front Camera Saved",18);
 			printf("\rFront Camera Saved");
-			system("yavta -c1 --file=front -f UYVY -s 1280x720 /dev/video1");
+			system("rm -f front.bin");
+			system("yavta -c1 --file=front.bin -f UYVY -s 1280x720 /dev/video1");
+			
+			long offset = 0;
+			int fsize = getFilesize("front.bin");
+			int camera = open("front.bin",O_RDONLY);
+			
+			//write(newsockfd,camera,fsize);
+			sendfile(newsockfd, camera, &offset, fsize);
+			
+			close(camera);
 		}
 		if(c=='x') {
 			write(newsockfd,"Bottom Camera Saved",19);
 			printf("\rBottom Camera Saved");
-			system("yavta -c1 --file=back -f UYVY -s 320x240 /dev/video0");
-			int fsize = getFilesize("back.bin");
-			int a = 0;
+			system("yavta -c1 --file=bottom.bin -f UYVY -s 320x240 /dev/video0");
+			int fsize = getFilesize("bottom.bin");
+			printf("\nfsize=%i",fsize);
+			/*int a = 0;
 			char contents[fsize], ch;
 			FILE *camera;
 
-			camera = fopen("back.bin","r");
+			camera = fopen("bottom.bin","r");
 			
 			if(camera != NULL) {
 				while((ch = fgetc(camera)) != EOF) {
 					contents[a++] = ch;
 				}
+				contents[a] = '\0';
 			}
 			
 			fclose(camera);
 			
-			write(newsockfd,&contents,fsize);
+			write(newsockfd,&contents,fsize);*/
 		}
-		if(c=='v') {
-			char tmp[100];
-			vbat_read(&vbat);
-			sprintf(tmp,"Voltage: %5.2fV\0",vbat.vbat);
-			write(newsockfd,&tmp,strlen(tmp));
-			printf("\rVoltage: %s",tmp);
-		}
-		if(c=='b') {
+		if(c=='c') {
 			int a;
 			write(newsockfd,"Flashing bottom LED",19);
 			printf("\rFlashing bottom LED");
@@ -230,7 +241,15 @@ int main( int argc, char *argv[] )
 				usleep(250000); // wait 1 second
 			}
 		}
+		if(c=='v') {
+			char tmp[100];
+			vbat_read(&vbat);
+			sprintf(tmp,"Voltage: %5.2fV\0",vbat.vbat);
+			write(newsockfd,&tmp,strlen(tmp));
+			printf("\rVoltage: %s",tmp);
+		}
 		
+		printf("\n");
 		fflush(stdout);
 		close(newsockfd);
 	  }
@@ -247,8 +266,6 @@ int main( int argc, char *argv[] )
 
 size_t getFilesize(const char* filename) {
 	struct stat st;
-	if(stat(filename, &st) != 0) {
-		return 0;
-	}
-	return st.st_size;   
+	stat(filename, &st);
+	return st.st_size; 
 }

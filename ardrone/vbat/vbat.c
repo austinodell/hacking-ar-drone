@@ -28,7 +28,7 @@
 #include "i2c-dev.h"
 #include "vbat.h"
 
-#define VBAT_ADDRESS 0x49
+#define VBAT_ADDRESS 0x4a
 
 int fd;
 

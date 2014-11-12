@@ -22,7 +22,6 @@ int main(int argc, char *argv[])
 		int sockfd = 0, n = 0;
 		char recvBuff[1024];
 		char buffer[256];
-		char imgBuffer[4000000];
 		struct sockaddr_in serv_addr; 
 
 		if(argc != 3)
@@ -64,13 +63,46 @@ int main(int argc, char *argv[])
 		read(sockfd,buffer,255);
 		printf("%s\n",buffer);
 		
-		if(strcmp(input,"z") == 0 || strcmp(input,"x") == 0) {
+		if(strcmp(input,"z") == 0) {
+	        
 			sleep(1);
-			read(sockfd,imgBuffer,4000000);
-			FILE * pFile;
-			pFile = fopen ("frame.bin", "wb");
-			fwrite (imgBuffer , sizeof(char), sizeof(imgBuffer), pFile);
-			fclose (pFile);
+			char imgBuffer[1843200];
+			bzero(imgBuffer,1843200);
+			recv(sockfd, imgBuffer, 1843200, 0);
+			//read(sockfd,imgBuffer,1843200);
+			FILE * imgFile;
+			imgFile = fopen ("front.bin", "w");
+			fwrite(imgBuffer, sizeof(char), 1843200, imgFile);
+			fclose (imgFile);
+			
+			
+			/*FILE *received_file;
+			char imgBuffer[256];
+			int file_size;
+			int remain_data = 0;
+			ssize_t len;
+			
+			/* Receiving file size 
+			recv(sockfd, imgBuffer, 256, 0);
+			file_size = atoi(imgBuffer);
+			fprintf(stdout, "\nFile size : %d\n", file_size);
+
+			received_file = fopen("front.bin", "w");
+			if (received_file == NULL)
+			{
+				fprintf(stderr, "Failed to open file foo --> %s\n", strerror(errno));
+				exit(EXIT_FAILURE);
+			}
+
+			remain_data = file_size;
+
+			while (((len = recv(sockfd, imgBuffer, BUFSIZ, 0)) > 0) && (remain_data > 0))
+			{
+				fwrite(imgBuffer, sizeof(char), len, received_file);
+				remain_data -= len;
+				fprintf(stdout, "Receive %zd bytes and we hope :- %d bytes\n", len, remain_data);
+			}
+			fclose(received_file);*/
 		}
 		
 		shutdown(sockfd,SHUT_RDWR);

@@ -58,11 +58,16 @@ ledgreen: setup motorboard.c mot.c ../gpio/gpio.c ../util/util.c main_motorboard
 	rm -f ../bin/motorboard/motorboard_leds_off
 	$(LOC) -lpthread -o ../bin/motorboard/motorboard_leds_green motorboard.c mot.c ../gpio/gpio.c ../util/util.c main_motorboard_leds_green.c
 
-socket: setup motorboard.c mot.c ../gpio/gpio.c ../util/util.c motor_socket.c
+socket: setup motorboard.c mot.c ../gpio/gpio.c ../util/util.c motor_socket.c socket_client.c
 	rm -f ../bin/motorboard/motor_socket
-	$(LOC) -lpthread -o ../bin/motorboard/motor_socket motorboard.c mot.c ../vbat/vbat.c ../gpio/gpio.c ../util/util.c motor_socket.c
+	$(LOC) -lpthread -o ../bin/motorboard/motor_socket motorboard.c mot.c ../vbat/vbat.c ../gpio/gpio.c ../util/util.c motor_socket.c -fpermissive
 	rm -f socket_client
 	gcc -o socket_client socket_client.c
+
+test: socket_server.c socket_client.c
+	rm -f socket_client socket_server
+	gcc -o socket_client socket_client.c
+	gcc -o socket_server socket_server.c
 
 clean:
 	rm -rf ../bin/motorboard
