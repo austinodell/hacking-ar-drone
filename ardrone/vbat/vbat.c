@@ -40,10 +40,6 @@ float vbat_get(unsigned char channel)
 	unsigned upper = i2c_smbus_read_byte_data(fd, 0x33 + (channel<<1));
 	
 	unsigned value = upper<<2 | lower;
-	//VREF Reference Voltage Internally connected to VDDC pin. 1.8V +/- 0.05V
-	//Measured Input Scaling Factor External inputs ANA{0,1,2,3}  0.25  V/V  	ch 0-3
-	//Measured Input Scaling Factor VDD{0,1,2,3,4} inputs 0.4  V/V 				ch 4-8
-	//Measured Input Scaling Factor VINSYS input 0.25 V/V 						ch 9
 	float factor;
 	if(channel<4) factor=0.031;
 	else if(channel<9) factor=1.8/0.4/1023;

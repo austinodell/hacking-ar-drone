@@ -12,6 +12,7 @@
 #include "../util/type.h"
 #include "../util/util.h"
 #include "mot.h"
+#include "../vbat/vbat.h"
 
 int main( int argc, char *argv[] )
 {
@@ -178,6 +179,35 @@ int main( int argc, char *argv[] )
 			write(newsockfd,"LEDs red",8);
 			printf("\rLeds red");
 			mot_SetLeds(MOT_LEDRED,MOT_LEDRED,MOT_LEDRED,MOT_LEDRED);
+		}
+		if(c=='z') {
+			write(newsockfd,"Front Camera Saved",18);
+			printf("\rFront Camera Saved");
+			system("yavta -c1 --file=front -f UYVY -s 1280x720 /dev/video1");
+		}
+		if(c=='x') {
+			write(newsockfd,"Bottom Camera Saved",19);
+			printf("\rBottom Camera Saved");
+			system("yavta -c1 --file=back -f UYVY -s 320x240 /dev/video0");
+		}
+		if(c=='v') {
+			char tmp[100];
+			vbat_read(&vbat);
+			sprintf(tmp,"Voltage: %5.2fV\0",vbat.vbat);
+			write(newsockfd,&tmp,strlen(tmp));
+			printf("\rVoltage: %s",tmp);
+		}
+		if(c=='b') {
+			write(newsockfd,"Flashing bottom LED",19);
+			printf("\rFlashing bottom LED");
+			for(a=0; a<3; a++) {
+				system("gpio 181 -d lo 0");system("gpio 180 -d lo 0"); // Both LEDs off
+				usleep(250000); // wait 1 second
+				system("gpio 180 -d lo 1"); // Green LED on
+				usleep(250000); // wait 1 second
+				system("gpio 181 -d lo 1"); // Red LED on
+				usleep(250000); // wait 1 second
+			}
 		}
 		
 		fflush(stdout);
