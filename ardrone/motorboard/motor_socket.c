@@ -24,6 +24,7 @@ size_t getFilesize(const char* filename);
 
 int main( int argc, char *argv[] )
 {
+	system("kk");
 	int sockfd, newsockfd, portno;
 	unsigned int clilen;
 	char buffer[256];
@@ -95,7 +96,13 @@ int main( int argc, char *argv[] )
 			break;
 		}
 		
+		char help[] = "1..4: Motor 1..4 at .5\n5: All Motors at .5\n+/-: Throttle up/down .01\n0: Stop All Motors\na: LEDs off\nd: LEDs on\nz: Take picture";
+		
 		char c=tolower(buffer[0]);
+		if(c=='h') {
+			write(newsockfd,&help,sizeof(help));
+			printf("Help\n");
+		}
 		if(c=='q') {
 			write(newsockfd,"Quit",4);
 			printf("Quit\n");
@@ -103,69 +110,75 @@ int main( int argc, char *argv[] )
 			break;
 		}
 		if(c=='1') {
-			write(newsockfd,"Run motor 1 at 50",18);
-			printf("Run Motor1 50\n");
-			throttle1 = .50;
+			write(newsockfd,"Run motor 1 at 25%",18);
+			printf("Run Motor1 25\n");
+			throttle1 = .25;
 			throttle2 = 0;
 			throttle3 = 0;
 			throttle4 = 0;
 			mot_Run(throttle1,throttle2,throttle3,throttle4);
 		}
 		if(c=='2') {
-			write(newsockfd,"Run motor 2 at 50",18);
-			printf("Run Motor2 50\n");
+			write(newsockfd,"Run motor 2 at 25%",18);
+			printf("Run Motor2 25\n");
 			throttle1 = 0;
-			throttle2 = .50;
+			throttle2 = .25;
 			throttle3 = 0;
 			throttle4 = 0;
 			mot_Run(throttle1,throttle2,throttle3,throttle4);
 		}
 		if(c=='3') {
-			write(newsockfd,"Run motor 3 at 50",18);
-			printf("Run Motor3 50\n");
+			write(newsockfd,"Run motor 3 at 25%",18);
+			printf("Run Motor3 25\n");
 			throttle1 = 0;
 			throttle2 = 0;
-			throttle3 = .50;
+			throttle3 = .25;
 			throttle4 = 0;
 			mot_Run(throttle1,throttle2,throttle3,throttle4);
 		}
 		if(c=='4') {
-			write(newsockfd,"Run motor 4 at 50",18);
-			printf("Run Motor4 50\n");
+			write(newsockfd,"Run motor 4 at 25%",18);
+			printf("Run Motor4 25\n");
 			throttle1 = 0;
 			throttle2 = 0;
 			throttle3 = 0;
-			throttle4 = .50;
+			throttle4 = .25;
 			mot_Run(throttle1,throttle2,throttle3,throttle4);
 		}
 		if(c=='5') {
-			write(newsockfd,"Run all motors at 50",21);
-			printf("Run All Motors 50\n");
-			throttle1 = .50;
-			throttle2 = .50;
-			throttle3 = .50;
-			throttle4 = .50;
+			write(newsockfd,"Run all motors at 25%",21);
+			printf("Run All Motors 25\n");
+			throttle1 = .25;
+			throttle2 = .25;
+			throttle3 = .25;
+			throttle4 = .25;
 			mot_Run(throttle1,throttle2,throttle3,throttle4);
 		}
-		if(c==',') {
-			write(newsockfd,"Throttle down",13);
+		if(c=='-') {
+			float val;
+			if(throttle1>step) { throttle1 -= step; val = throttle1; }
+			if(throttle2>step) { throttle2 -= step; val = throttle2; }
+			if(throttle3>step) { throttle3 -= step; val = throttle3; }
+			if(throttle4>step) { throttle4 -= step; val = throttle4; }
+			mot_Run(throttle1,throttle2,throttle3,throttle4);
+			char output[100];
+			sprintf(output,"Throttle down: %.0f%%",val*100);
+			write(newsockfd,&output,sizeof(output));
 			printf("Throttle down\n");
-			if(throttle1>step) throttle1 -= step;
-			if(throttle2>step) throttle2 -= step;
-			if(throttle3>step) throttle3 -= step;
-			if(throttle4>step) throttle4 -= step;
-			mot_Run(throttle1,throttle2,throttle3,throttle4);
 		}
-		if(c=='.' && buffer[1] !='q') {
-			write(newsockfd,"Throttle up",11);
+		if(c=='+' || c=='=') {
+			float val;
+			if(throttle1>0) { throttle1 += step; val = throttle1; }
+			if(throttle2>0) { throttle2 += step; val = throttle2; }
+			if(throttle3>0) { throttle3 += step; val = throttle3; }
+			if(throttle4>0) { throttle4 += step; val = throttle4; }
+			mot_Run(throttle1,throttle2,throttle3,throttle4);
+			char output[100];
+			sprintf(output,"Throttle up: %.0f%%",val*100);
+			write(newsockfd,&output,sizeof(output));
 			printf("Throttle up\n");
-			if(throttle1>0) throttle1 += step;
-			if(throttle2>0) throttle2 += step;
-			if(throttle3>0) throttle3 += step;
-			if(throttle4>0) throttle4 += step;
-			mot_Run(throttle1,throttle2,throttle3,throttle4);
 		}
-		if(c==' ') {
+		if(c=='0') {
 			write(newsockfd,"Stop",4);
 			printf("\rStop");
 			mot_Stop();
@@ -196,12 +209,12 @@ int main( int argc, char *argv[] )
 			write(newsockfd,"Front Camera Saved",18);
 			printf("\rFront Camera Saved");
 		}
-		if(c=='x') {
+		/*if(c=='x') {
 			system("rm -f bottom.bin");
-			system("yavta -c1 --file=bottom.bin -f UYVY -s 320x240 /dev/video0");
+			system("yavta -c1 --file=bottom.bin -f UYVY -s 320x240 /dev/video2");
 			write(newsockfd,"Bottom Camera Saved",19);
 			printf("\rBottom Camera Saved");
-		}
+		}*/
 		if(c=='c') {
 			int a;
 			write(newsockfd,"Flashing bottom LED",19);
