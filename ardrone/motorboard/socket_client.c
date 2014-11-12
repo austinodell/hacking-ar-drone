@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
 			recv(sockfd, imgBuffer, 1843200, 0);
 			//read(sockfd,imgBuffer,1843200);
 			FILE * imgFile;
-			imgFile = fopen ("front.bin", "w");
+			imgFile = fopen ("front_rec.bin", "w");
 			fwrite(imgBuffer, sizeof(char), 1843200, imgFile);
 			fclose (imgFile);
 			
