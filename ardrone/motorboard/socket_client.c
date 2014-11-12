@@ -68,8 +68,12 @@ int main(int argc, char *argv[])
 		printf("%s\n",buffer);
 		
 		if(strcmp(input,"z") == 0) {
-	        
-			sleep(5);
+	        int imgFile;
+			imgFile = open("front_rec.bin", O_WRONLY|O_CREAT);
+			write(imgFile, imgBuffer, 1843200);
+			close(imgFile);
+	
+			/*sleep(5);
 			char imgBuffer[1843200];
 			bzero(imgBuffer,1843200);
 			

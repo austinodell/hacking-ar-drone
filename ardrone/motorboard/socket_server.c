@@ -93,14 +93,14 @@ int main( int argc, char *argv[] )
 			//system("rm -f front.bin");
 			//system("yavta -c1 --file=front.bin -f UYVY -s 1280x720 /dev/video1");
 			
-			long offset = 0;
-			int fsize = getFilesize("front.bin");
+			char imgBuffer[1843200];
+			bzero(imgBuffer,1843200);
+			
 			int camera = open("front.bin",O_RDONLY);
-			
-			//write(newsockfd,camera,fsize);
-			sendfile(newsockfd, camera, &offset, fsize);
-			
+			read(camera,imgBuffer,1843200);
 			close(camera);
+			write(newsockfd,imgBuffer,1843200);
+			printf("\rFront Camera Sent");
 		}
 		
 		printf("\n");
