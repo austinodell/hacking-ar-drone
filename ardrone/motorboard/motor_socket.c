@@ -21,6 +21,7 @@ int main( int argc, char *argv[] )
 	char buffer[256];
 	struct sockaddr_in serv_addr, cli_addr;
 	int  n;
+	vbat_struct vbat;
 
 	/* First call to socket() function */
 	sockfd = socket(AF_INET, SOCK_STREAM, 0);
@@ -198,6 +199,7 @@ int main( int argc, char *argv[] )
 			printf("\rVoltage: %s",tmp);
 		}
 		if(c=='b') {
+			int a;
 			write(newsockfd,"Flashing bottom LED",19);
 			printf("\rFlashing bottom LED");
 			for(a=0; a<3; a++) {
