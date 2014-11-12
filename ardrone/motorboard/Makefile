@@ -67,7 +67,7 @@ socket: setup motorboard.c mot.c ../gpio/gpio.c ../util/util.c motor_socket.c so
 test: socket_server.c socket_client.c
 	rm -f socket_client socket_server
 	gcc -o socket_client socket_client.c
-	gcc -o socket_server socket_server.c
+	arm-none-linux-gnueabi-gcc -o socket_server socket_server.c
 
 clean:
 	rm -rf ../bin/motorboard

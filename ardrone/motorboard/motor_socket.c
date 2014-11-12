@@ -191,42 +191,16 @@ int main( int argc, char *argv[] )
 			mot_SetLeds(MOT_LEDRED,MOT_LEDRED,MOT_LEDRED,MOT_LEDRED);
 		}
 		if(c=='z') {
-			write(newsockfd,"Front Camera Saved",18);
-			printf("\rFront Camera Saved");
 			system("rm -f front.bin");
 			system("yavta -c1 --file=front.bin -f UYVY -s 1280x720 /dev/video1");
-			
-			long offset = 0;
-			int fsize = getFilesize("front.bin");
-			int camera = open("front.bin",O_RDONLY);
-			
-			//write(newsockfd,camera,fsize);
-			sendfile(newsockfd, camera, &offset, fsize);
-			
-			close(camera);
+			write(newsockfd,"Front Camera Saved",18);
+			printf("\rFront Camera Saved");
 		}
 		if(c=='x') {
+			system("rm -f bottom.bin");
+			system("yavta -c1 --file=bottom.bin -f UYVY -s 320x240 /dev/video0");
 			write(newsockfd,"Bottom Camera Saved",19);
 			printf("\rBottom Camera Saved");
-			system("yavta -c1 --file=bottom.bin -f UYVY -s 320x240 /dev/video0");
-			int fsize = getFilesize("bottom.bin");
-			printf("\nfsize=%i",fsize);
-			/*int a = 0;
-			char contents[fsize], ch;
-			FILE *camera;
-
-			camera = fopen("bottom.bin","r");
-			
-			if(camera != NULL) {
-				while((ch = fgetc(camera)) != EOF) {
-					contents[a++] = ch;
-				}
-				contents[a] = '\0';
-			}
-			
-			fclose(camera);
-			
-			write(newsockfd,&contents,fsize);*/
 		}
 		if(c=='c') {
 			int a;

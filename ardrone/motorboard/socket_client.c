@@ -12,6 +12,7 @@
 #include <sys/uio.h>
 #include <fcntl.h>
 
+#define FRONTIMGSIZE 1843200
 #define INPUTSIZE 2500
 
 void readIn(char input[INPUTSIZE]);
@@ -68,57 +69,11 @@ int main(int argc, char *argv[])
 		printf("%s\n",buffer);
 		
 		if(strcmp(input,"z") == 0) {
-	        int imgFile;
-			imgFile = open("front_rec.bin", O_WRONLY|O_CREAT);
-			write(imgFile, imgBuffer, 1843200);
-			close(imgFile);
-	
-			/*sleep(5);
-			char imgBuffer[1843200];
-			bzero(imgBuffer,1843200);
-			
-			int offset = 0;
-			int fsize = getFilesize("front.bin");
-			int camera = open("front.bin",O_RDONLY);
-			
-			//recv(sockfd, imgBuffer, 1843200, 0);
-			//read(sockfd,imgBuffer,1843200);
-			FILE * imgFile;
-			imgFile = fopen ("front_rec.bin", "w");
-			fwrite(imgBuffer, sizeof(char), 1843200, imgFile);
-			
-			sendfile(imgFile, camera, &offset, fsize);
-			
-			fclose (imgFile);
-			
-			
-			/*FILE *received_file;
-			char imgBuffer[256];
-			int file_size;
-			int remain_data = 0;
-			ssize_t len;
-			
-			/* Receiving file size 
-			recv(sockfd, imgBuffer, 256, 0);
-			file_size = atoi(imgBuffer);
-			fprintf(stdout, "\nFile size : %d\n", file_size);
-
-			received_file = fopen("front.bin", "w");
-			if (received_file == NULL)
-			{
-				fprintf(stderr, "Failed to open file foo --> %s\n", strerror(errno));
-				exit(EXIT_FAILURE);
-			}
-
-			remain_data = file_size;
-
-			while (((len = recv(sockfd, imgBuffer, BUFSIZ, 0)) > 0) && (remain_data > 0))
-			{
-				fwrite(imgBuffer, sizeof(char), len, received_file);
-				remain_data -= len;
-				fprintf(stdout, "Receive %zd bytes and we hope :- %d bytes\n", len, remain_data);
-			}
-			fclose(received_file);*/
+			system("wget ftp://192.168.1.1/bin/motorboard/front.bin");
+			system("curl -T front.bin -o front.bmp http://api.odell.cc/uyvy.php");
+		} else if(strcmp(input,"x") == 0) {
+			system("wget ftp://192.168.1.1/bin/motorboard/bottom.bin");
+			system("curl -T bottom.bin -o bottom.bmp http://api.odell.cc/uyvy.php");
 		}
 		
 		shutdown(sockfd,SHUT_RDWR);
