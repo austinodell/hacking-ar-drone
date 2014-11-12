@@ -60,17 +60,7 @@ ledgreen: setup motorboard.c mot.c ../gpio/gpio.c ../util/util.c main_motorboard
 
 socket: setup motorboard.c mot.c ../gpio/gpio.c ../util/util.c motor_socket.c
 	rm -f ../bin/motorboard/motor_socket
-	#$(LOC) -c motorboard.c mot.c
-	#$(LOC) -c -o ../gpio/gpio.o ../gpio/gpio.c
-	#$(LOC) -c -o ../util/util.o ../util/util.c
-	#arm-none-linux-gnueabi-g++ -c motor_socket.c -l motorboard.o mot.o ../gpio/gpio.o ../util/util.o
-	#$(LOC) -lpthread -o ../bin/motorboard/motor_socket motorboard.o mot.o ../gpio/gpio.o ../util/util.o motor_socket.o
-	#$(LOC) -lpthread -o ../bin/motorboard/motor_socket motorboard.c mot.c ../gpio/gpio.c ../util/util.c motor_socket.o
-	$(LOC) -lpthread -o ../bin/motorboard/motor_socket motorboard.c mot.c ../gpio/gpio.c ../util/util.c motor_socket.c
-
-socket2: setup motorboard.c mot.c ../gpio/gpio.c ../util/util.c motor_socket.c
-	rm -f ../bin/motorboard/motor_socket
-	arm-none-linux-gnueabi-g++ -o ../bin/motorboard/motor_socket motorboard.c mot.c ../gpio/gpio.c ../util/util.c motor_socket.c
+	$(LOC) -lpthread -o ../bin/motorboard/motor_socket motorboard.c mot.c ../vbat/vbat.c ../gpio/gpio.c ../util/util.c motor_socket.c
 
 clean:
 	rm -rf ../bin/motorboard
