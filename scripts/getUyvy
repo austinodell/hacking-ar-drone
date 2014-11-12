@@ -1,3 +1,3 @@
-#!/bin/bash
+#!/bin/sh
 
 yavta -c1 -F -f UYVY -s 1280x720 /dev/video1
