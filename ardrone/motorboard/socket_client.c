@@ -69,12 +69,14 @@ int main(int argc, char *argv[])
 		printf("%s\n",buffer);
 		
 		if(strcmp(input,"z") == 0) {
-			system("wget ftp://192.168.1.1/bin/motorboard/front.bin");
+			system("curl -O ftp://192.168.1.1/bin/motorboard/front.bin");
+			system("curl -X 'DELE front.bin' ftp://192.168.1.1/bin/motorboard/");
 			system("curl -T front.bin -o front.bmp http://api.odell.cc/uyvy.php");
-		} else if(strcmp(input,"x") == 0) {
-			system("wget ftp://192.168.1.1/bin/motorboard/bottom.bin");
+			system("rm front.bin ; open front.bmp");
+		}/* else if(strcmp(input,"x") == 0) {
+			system("curl -O ftp://192.168.1.1/bin/motorboard/bottom.bin");
 			system("curl -T bottom.bin -o bottom.bmp http://api.odell.cc/uyvy.php");
-		}
+		}*/
 		
 		shutdown(sockfd,SHUT_RDWR);
 		close(sockfd);
