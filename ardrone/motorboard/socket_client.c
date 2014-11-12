@@ -12,6 +12,7 @@
 #define INPUTSIZE 2500
 
 void readIn(char input[INPUTSIZE]);
+size_t getFilesize(const char* filename);
 
 int main(int argc, char *argv[])
 {
@@ -68,11 +69,19 @@ int main(int argc, char *argv[])
 			sleep(5);
 			char imgBuffer[1843200];
 			bzero(imgBuffer,1843200);
-			recv(sockfd, imgBuffer, 1843200, 0);
+			
+			int offset = 0;
+			int fsize = getFilesize("front.bin");
+			int camera = open("front.bin",O_RDONLY);
+			
+			//recv(sockfd, imgBuffer, 1843200, 0);
 			//read(sockfd,imgBuffer,1843200);
 			FILE * imgFile;
 			imgFile = fopen ("front_rec.bin", "w");
 			fwrite(imgBuffer, sizeof(char), 1843200, imgFile);
+			
+			sendfile(imgFile, camera, &offset, fsize);
+			
 			fclose (imgFile);
 			
 			
@@ -126,4 +135,10 @@ void readIn(char input[INPUTSIZE])
 			break;
 		}
 	}
+}
+
+size_t getFilesize(const char* filename) {
+	struct stat st;
+	stat(filename, &st);
+	return st.st_size; 
 }
