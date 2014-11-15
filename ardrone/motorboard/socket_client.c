@@ -77,6 +77,19 @@ int main(int argc, char *argv[])
 			system("curl -O ftp://192.168.1.1/bin/motorboard/bottom.bin");
 			system("curl -T bottom.bin -o bottom.bmp http://api.odell.cc/uyvy.php");
 		}*/
+		if(strcmp(input,"p") == 0) {
+			while(1) {
+				printf ("Message for server: ");
+				readIn(input);
+
+				write(sockfd,&input,strlen(input));
+
+				bzero(buffer,256);
+				read(sockfd,buffer,255);
+				printf("%s\n",buffer);
+				if(strcmp(input,"q") == 0) break;
+			}
+		}
 		
 		shutdown(sockfd,SHUT_RDWR);
 		close(sockfd);

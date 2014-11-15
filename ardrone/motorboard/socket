@@ -1,0 +1,3 @@
+#!/bin/sh
+
+/data/video/bin/motorboard/motor_socket

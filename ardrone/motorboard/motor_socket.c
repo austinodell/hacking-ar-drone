@@ -25,6 +25,7 @@ size_t getFilesize(const char* filename);
 int main( int argc, char *argv[] )
 {
 	system("kk");
+	sleep(1);
 	int sockfd, newsockfd, portno;
 	unsigned int clilen;
 	char buffer[256];
@@ -96,7 +97,7 @@ int main( int argc, char *argv[] )
 			break;
 		}
 		
-		char help[] = "1..4: Motor 1..4 at .5\n5: All Motors at .5\n+/-: Throttle up/down .01\n0: Stop All Motors\na: LEDs off\nd: LEDs on\nz: Take picture";
+		char help[] = "1..4: Motor 1..4 at .5\n5: All Motors at .5\n+/-: Throttle up/down .01\n0: Stop All Motors\na: LEDs off\nd: LEDs on\nz: Take picture\nc: Flash bottom LED\np: Presentation Mode";
 		
 		char c=tolower(buffer[0]);
 		if(c=='h') {
@@ -154,6 +155,30 @@ int main( int argc, char *argv[] )
 			throttle4 = .25;
 			mot_Run(throttle1,throttle2,throttle3,throttle4);
 		}
+		if(c=='6') {
+			write(newsockfd,"Taking off",10);
+			printf("Taking off\n");
+			float throttle14 = .25;
+			float throttle23 = .25;
+			mot_Run(throttle14,throttle23,throttle23,throttle14);
+			usleep(500000);
+			int a = 0;
+			while(a<50) {
+				throttle14 += .01;
+				throttle23 += .01;
+				mot_Run(throttle14,throttle23,throttle23,throttle14);
+				usleep(100000);
+				a++;
+			}
+			while(a>0) {
+				throttle14 -= .01;
+				throttle23 -= .01;
+				mot_Run(throttle14,throttle23,throttle23,throttle14);
+				usleep(150000);
+				a--;
+			}
+			mot_Stop();
+		}
 		if(c=='-') {
 			float val;
 			if(throttle1>step) { throttle1 -= step; val = throttle1; }
@@ -208,6 +233,21 @@ int main( int argc, char *argv[] )
 			system("yavta -c1 --file=front.bin -f UYVY -s 1280x720 /dev/video1");
 			write(newsockfd,"Front Camera Saved",18);
 			printf("\rFront Camera Saved");
+		}
+		if(c=='p') {
+			write(newsockfd,"in presentation mode",20);
+			printf("\rPresentation mode");
+			while(1) {
+				bzero(buffer,256);
+				read(newsockfd,buffer,255);
+				char cc=tolower(buffer[0]);
+				if(cc=='q') {
+					write(newsockfd,"Exiting presentation mode...",28);
+					break;
+				} else {
+					write(newsockfd,"Not a valid command! (q)uit",27);
+				}
+			}
 		}
 		/*if(c=='x') {
 			system("rm -f bottom.bin");
