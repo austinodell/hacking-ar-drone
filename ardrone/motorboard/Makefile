@@ -61,13 +61,8 @@ ledgreen: setup motorboard.c mot.c ../gpio/gpio.c ../util/util.c main_motorboard
 socket: setup motorboard.c mot.c ../gpio/gpio.c ../util/util.c motor_socket.c socket_client.c
 	rm -f ../bin/motorboard/motor_socket
 	$(LOC) -lpthread -o ../bin/motorboard/motor_socket motorboard.c mot.c ../vbat/vbat.c ../gpio/gpio.c ../util/util.c motor_socket.c -fpermissive
-	rm -f socket_client
-	gcc -o socket_client socket_client.c
-
-test: socket_server.c socket_client.c
-	rm -f socket_client socket_server
-	gcc -o socket_client socket_client.c
-	arm-none-linux-gnueabi-gcc -o socket_server socket_server.c
+	rm -f ../bin/motorboard/socket_client
+	gcc -o ../bin/motorboard/socket_client socket_client.c
 
 clean:
 	rm -rf ../bin/motorboard
