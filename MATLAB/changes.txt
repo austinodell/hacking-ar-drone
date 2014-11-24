@@ -1,0 +1,49 @@
+rm -f Makefile; mv *.mk Makefile
+
+Change:
+
+#------------------------
+# BUILD TOOL COMMANDS
+#------------------------
+
+# C Compiler: GNU C Compiler
+CC = arm-none-linux-gnueabi-gcc
+
+# Linker: GNU Linker
+LD = arm-none-linux-gnueabi-gcc
+
+# C++ Compiler: GNU C++ Compiler
+CPP = arm-none-linux-gnueabi-g++
+
+# C++ Linker: GNU C++ Linker
+CPP_LD = arm-none-linux-gnueabi-g++
+
+
+Add:
+
+add to CPP_LDFLAGS -pthread
+add to CPP_SHAREDLIB_LDFLAGS -pthread
+
+
+###########################################################################
+## OBJECTS
+###########################################################################
+
+add this variable:
+EXTRA_OBJS = ../mycfiles/mot.o ../mycfiles/motorboard.o ../mycfiles/gpio.o ../mycfiles/util.o
+
+Change:
+###########################################################################
+## FINAL TARGET
+###########################################################################
+
+#-------------------------------------------
+# Create a standalone executable            
+#-------------------------------------------
+
+add variable EXTRA_OBJS to the compilation as shown below
+
+$(PRODUCT) : $(OBJS) $(PREBUILT_OBJS) $(MAIN_OBJ)
+	@echo "### Creating standalone executable "$(PRODUCT)" ..."
+	$(CPP_LD) $(CPP_LDFLAGS) -o $(PRODUCT) $(OBJS) $(MAIN_OBJ) $(EXTRA_OBJS) $(SYSTEM_LIBS) $(TOOLCHAIN_LIBS)
+	@echo "### Created: $(PRODUCT)"
