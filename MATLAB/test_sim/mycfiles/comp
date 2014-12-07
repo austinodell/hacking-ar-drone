@@ -1,7 +1,10 @@
 #!/bin/bash
 
+rm -f *.o
+
 arm-none-linux-gnueabi-g++ -c mot.c -pthread -o mot.o
 arm-none-linux-gnueabi-g++ -c motorboard.c -pthread -o motorboard.o
 arm-none-linux-gnueabi-g++ -c util.c -pthread -o util.o
 arm-none-linux-gnueabi-g++ -c gpio.c -pthread -o gpio.o
-
+arm-none-linux-gnueabi-g++ -c navboard.c -pthread -o navboard.o
+arm-none-linux-gnueabi-g++ -c navcontrol.c -pthread -o navcontrol.o

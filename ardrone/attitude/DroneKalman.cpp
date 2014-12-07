@@ -17,13 +17,13 @@
 
 #include "DroneKalman.h"
 
-#include <filter/extendedkalmanfilter.h>
+//#include <filter/extendedkalmanfilter.h>
 
-#include <model/linearanalyticsystemmodel_gaussianuncertainty.h>
-#include <model/linearanalyticmeasurementmodel_gaussianuncertainty.h>
+//#include <model/linearanalyticsystemmodel_gaussianuncertainty.h>
+//#include <model/linearanalyticmeasurementmodel_gaussianuncertainty.h>
 
-#include <pdf/analyticconditionalgaussian.h>
-#include <pdf/linearanalyticconditionalgaussian.h>
+//#include <pdf/analyticconditionalgaussian.h>
+//#include <pdf/linearanalyticconditionalgaussian.h>
 
 #include <iostream>
 #include <fstream>
